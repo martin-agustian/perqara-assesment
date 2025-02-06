@@ -5,6 +5,7 @@ export default {
   theme: {
     extend: {
       colors: {
+        "artyclick-red": "#FF0000",
         "baltic-sea": "#24282F",
         "carmine-pink": "#E74C3C",
         "dark": "#1E232B",
