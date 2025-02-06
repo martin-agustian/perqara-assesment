@@ -9,6 +9,7 @@
  
 @layer base {
   body {
+    @apply bg-dark text-mercury;
     font-family: Montserrat !important;
   }
 }

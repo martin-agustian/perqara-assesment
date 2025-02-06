@@ -1,3 +1,9 @@
 <template>
-  <div>index</div>
+  <Container>    
+    <TitleHead>
+      discover movie  
+    </TitleHead>
+
+    <Movie />
+  </Container>
 </template>
