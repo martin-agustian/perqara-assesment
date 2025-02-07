@@ -2,7 +2,7 @@
   <Container>
     <div class="flex justify-between items-center mb-5">
       <TitleHead>
-        discover movie  
+        discover movie
       </TitleHead>
 
       <div class="flex gap-[10px]">
@@ -10,13 +10,13 @@
           Popularity
         </Capsule>
 
-        <Capsule>
+        <Capsule variant="secondary">
           Release Date
         </Capsule>
       </div>
     </div>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-[15px]">
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-[15px]">
       <Movie />
       <Movie />
       <Movie />
