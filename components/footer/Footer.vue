@@ -4,7 +4,7 @@
       <div>
         © 2021 MoovieTime. All rights reserved.
       </div>
-      <img src="../public/logo-grey.svg" class="cursor-pointer w-[88px]">
+      <img src="../../public/logo-grey.svg" class="cursor-pointer w-[88px]">
       <div>
         Made with Nuxt JS (ver 3)
       </div>
