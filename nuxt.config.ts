@@ -10,9 +10,14 @@ export default defineNuxtConfig({
     extensions: [".vue"],
   }],
   modules: [
-    '@nuxtjs/tailwindcss'
+    "@nuxtjs/tailwindcss",
+    "shadcn-nuxt"
   ],
   css: [
     "assets/css/tailwind.css",
   ],
+  shadcn: {
+    prefix: "",
+    componentDir: "./components"
+  }
 })

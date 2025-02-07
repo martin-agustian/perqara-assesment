@@ -1,12 +1,12 @@
 <script setup lang="ts">
-  import { twMerge } from 'tailwind-merge';
+  import { cn } from "@/helpers/utils.helper";
 
   // ** Types
-  import type { HTMLAttributes } from 'vue';
-  import type { CapsuleVariants } from '.';
+  import type { HTMLAttributes } from "vue";
+  import type { CapsuleVariants } from ".";
 
   // ** Variants
-  import { capsuleVariants } from '.';
+  import { capsuleVariants } from ".";
 
   const props = defineProps<{
     class?: HTMLAttributes["class"],
@@ -15,7 +15,7 @@
 </script>
 
 <template>
-  <div :class="twMerge(capsuleVariants({ variant }), props.class)">
+  <div :class="cn(capsuleVariants({ variant }), props.class)">
     <slot />
   </div>
 </template>
