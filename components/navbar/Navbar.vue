@@ -1,7 +1,7 @@
 <template>
   <div class="bg-ebony-clay text-white uppercase p-[15px]">
     <Container class="flex justify-between items-center gap-[35px] !py-0">
-      <img src="../../public/logo.svg" class="cursor-pointer">
+      <img src="../../public/logo.svg" class="cursor-pointer" @click="navigateTo('/')">
 
       <div class="relative flex-1">
         <img src="../../public/icon-movie.svg" class="size-[24px] absolute left-[10px] top-[50%] translate-y-[-50%]">
@@ -13,7 +13,7 @@
         <li class="flex gap-[5px] items-center cursor-pointer">
           <img src="../../public/icon-grid.svg" class="size-[20px]"> categories
         </li>
-        <li class="cursor-pointer">movies</li>
+        <li class="cursor-pointer" @click="navigateTo('/list')">movies</li>
         <li class="cursor-pointer">tv shows</li>
         <li class="cursor-pointer">login</li>
       </ul>
