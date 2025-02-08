@@ -56,7 +56,8 @@ module.exports = {
         "ebony-clay": "#292E36",
         "olso-grey": "#929292",
         "mercury": "#E5E5E5",
-        "mirage": "#15191F"
+        "mirage": "#15191F",
+        "mountain-mist": "#8E9195"
       },
       borderRadius: {
         xl: "calc(var(--radius) + 4px)",

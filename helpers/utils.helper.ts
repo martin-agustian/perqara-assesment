@@ -4,6 +4,10 @@ import { twMerge } from "tailwind-merge";
 // ** Types
 import type { ClassValue } from "clsx";
 
-export function cn(...inputs: ClassValue[]) {
+export const cn = (...inputs: ClassValue[]) => {
   return twMerge(clsx(inputs))
+}
+
+export const imageFullPath = (path?: string) => {
+  return `https://image.tmdb.org/t/p/original/${path}`;
 }
