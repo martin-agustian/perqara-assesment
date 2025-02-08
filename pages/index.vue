@@ -7,7 +7,7 @@
   import TrendingAPI from "@/apis/Trending.api";
 
   // ** Helpers
-  import { fullPathImage } from "@/helpers/utils.helper";
+  import { fullPathImage, fullYear, roundedRating } from "@/helpers/utils.helper";
 
   // ** Types
   import type { MovieDT } from "@/types/models/Movie.model";
@@ -21,14 +21,16 @@
 
   const loading = ref<Boolean>(true);
 
+  const isCapsuleIsPopular = ref<Boolean>(true);
+
   const movies = ref<MovieDT[]>([]);
   const trendings = ref<TrendingDT[]>([]);
 
   const getTrending = async () => {
     try {
       loading.value = true;
-
-      let trendingAPI = await TrendingAPI.All();
+      
+      const trendingAPI = await TrendingAPI.All();
 
       if (trendingAPI.status === 200) {
         trendings.value = trendingAPI.data.results.slice(0, 6);
@@ -50,7 +52,7 @@
     try {
       loading.value = true;
 
-      let movieAPI = await MovieAPI.Popular();
+      const movieAPI = isCapsuleIsPopular.value ? await MovieAPI.Popular() : await MovieAPI.Upcoming();
 
       if (movieAPI.status === 200) {
         movies.value = movieAPI.data.results
@@ -68,10 +70,15 @@
     }
   }
 
-  onMounted(async () => {
+  onMounted(() => {
     getTrending();
     getMovie();
   })
+
+  const handleCapsuleUpdate = (value: Boolean) => {
+    isCapsuleIsPopular.value = value;
+    getMovie();
+  }
 </script>
 
 <template>
@@ -79,22 +86,22 @@
     <div class="py-10">
       <Carousel class="relative py-10" :opts="{ loop: true }" :plugins="[plugin]">
         <CarouselContent>
-          <CarouselItem v-for="(treding, i) in trendings" :key="i" class="max-w-[540px] mx-[10px]">
+          <CarouselItem v-for="(trending, i) in trendings" :key="i" class="max-w-[540px] mx-[10px]">
             <div class="flex gap-[50px] bg-black p-3">
-              <img :src="fullPathImage(treding.poster_path)" class="w-[200px] scale-125" />
+              <img :src="fullPathImage(trending.poster_path)" class="w-[200px] scale-125" />
               
               <div class="flex flex-col gap-[5px]">
                 <div class="flex gap-[5px] items-center font-semibold text-[18px]">
-                  <img src="../public/icon-star.svg" /> {{ treding.vote_average }}
+                  <img src="../public/icon-star.svg" /> {{ roundedRating(trending.vote_average) }}
                 </div>
                 <div class="text-[25px] font-medium">
-                  {{ treding.name }}
+                  {{ trending.name }}
                 </div>
                 <div class="text-[16px] flex gap-[8px] items-center">
-                  2021 <img src="../public/icon-ellipse.svg" /> Sci-Fi
+                  {{ fullYear(trending.first_air_date) }} <img src="../public/icon-ellipse.svg" /> Sci-Fi
                 </div>
                 <div class="text-[12px]">
-                  {{ treding.overview }}
+                  {{ trending.overview }}
                 </div>
               </div>
             </div>
@@ -112,12 +119,21 @@
 
 			<Container>
 				<div class="flex justify-between items-center mb-5">
-					<TitleHead> discover movie </TitleHead>
+					<TitleHead>discover movie</TitleHead>
 
 					<div class="flex gap-[10px]">
-						<Capsule> Popularity </Capsule>
-
-						<Capsule variant="secondary"> Release Date </Capsule>
+						<Capsule 
+              :variant="isCapsuleIsPopular ? 'primary' : 'secondary'"
+              @click="handleCapsuleUpdate(true)"
+            >
+              Popularity
+            </Capsule>
+						<Capsule 
+              :variant="!isCapsuleIsPopular ? 'primary' : 'secondary'" 
+              @click="handleCapsuleUpdate(false)"
+            >
+              Release Date
+            </Capsule>
 					</div>
 				</div>
 

@@ -1,6 +1,6 @@
 import { cva, type VariantProps } from "class-variance-authority";
 
-export const capsuleVariants = cva("inline-flex items-center h-[30px] text-[13px] font-semibold rounded-full px-4", {
+export const capsuleVariants = cva("inline-flex items-center h-[30px] text-[13px] font-semibold rounded-full cursor-pointer px-4", {
 	variants: {
 		variant: {
 			primary: "text-white bg-artyclick-red",
