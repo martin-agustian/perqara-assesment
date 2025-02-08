@@ -101,10 +101,10 @@
       params.with_genres = genreFilter.value.toString();
       params.sort_by = sortFilter.value as string;
 
-      const movieAPI = await DiscoverAPI.Movie(params);
+      const discoverAPI = await DiscoverAPI.Movie(params);
 
-      if (movieAPI.status === 200) {
-        movies.value = movieAPI.data.results
+      if (discoverAPI.status === 200) {
+        movies.value = discoverAPI.data.results
       }
     }
     catch (error) {

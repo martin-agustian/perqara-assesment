@@ -4,7 +4,7 @@
   import Swal from "sweetalert2";
 
   // ** APIs
-  import MovieAPI from "@/apis/Movie.api";
+  import DiscoverAPI from "@/apis/Discover.api";
   import TrendingAPI from "@/apis/Trending.api";
 
   // ** Helpers
@@ -12,6 +12,7 @@
 
   // ** Types
   import type { CarouselApi } from "@/components/carousel";
+  import type { DiscoverMovieRequestDT } from "@/types/requests/Discover.request";
   import type { MovieDT } from "@/types/models/Movie.model";
   import type { TrendingDT } from "@/types/models/Trending.model";
 
@@ -63,10 +64,19 @@
     try {
       loading.value = true;
 
-      const movieAPI = isCapsuleIsPopular.value ? await MovieAPI.Popular() : await MovieAPI.Upcoming();
+      let params = {} as DiscoverMovieRequestDT;
 
-      if (movieAPI.status === 200) {
-        movies.value = movieAPI.data.results
+      if (isCapsuleIsPopular.value) {
+        params.sort_by = 'popularity.desc';
+      }
+      else {
+        params.sort_by = 'primary_release_date.desc';
+      }
+      
+      const discoverAPI = await DiscoverAPI.Movie(params);
+
+      if (discoverAPI.status === 200) {
+        movies.value = discoverAPI.data.results;
       }
     }
     catch (error) {

@@ -12,17 +12,18 @@
 
 <template>
   <div class="w-full">
-    <div class="w-full relative inline-block cursor-pointer">
+    <div class="w-full relative inline-block bg-black cursor-pointer">
       <div class="text-[18px] font-semibold bg-black/50 absolute right-0 p-2">
         {{ roundedRating(props.movie.vote_average) }}
       </div>
-      <img :src="fullPathImage(props.movie.poster_path)" class="w-full">
+      <img v-if="props.movie.poster_path" :src="fullPathImage(props.movie.poster_path)" class="h-[296px] w-full object-center">
+      <img v-else src="/public/the-movie-db-logo.svg" class="h-[296px] w-full object-center p-4">
     </div>
     <div class="text-[16px] font-semibold cursor-pointer mt-3">
       {{ props.movie.title }}
     </div>
     <div class="text-[14px] text-olso-grey">
-      {{ fullYear(props.movie.release_date) }}
+      {{ props.movie.release_date ? fullYear(props.movie.release_date) : '-' }}
     </div>
   </div>
 </template>
