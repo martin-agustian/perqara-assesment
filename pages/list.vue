@@ -8,7 +8,37 @@
   import { fullPathImage, fullYear, roundedRating } from "@/helpers/utils.helper";
 
   // ** Types
+  import type { OptionsDT } from "@/commons/types";
   import type { MovieDT } from "@/types/models/Movie.model";
+
+  const sortOptions: OptionsDT[] = [
+    {
+      label: 'Popularity Ascending',
+      value: 'popularity'
+    },
+    {
+      label: 'Popularity Descending',
+      value: 'popularity 2'
+    },
+    {
+      label: 'Release Date Ascending',
+      value: 'popularity 3'
+    },
+    {
+      label: 'Release Date Descending',
+      value: 'popularity 4'
+    },
+    {
+      label: 'Rating Ascending',
+      value: 'popularity 5'
+    },
+    {
+      label: 'Rating Descending',
+      value: 'popularity 6'
+    },
+  ];
+
+  const sortFilter = defineModel<string>('');
 
   const loading = ref<Boolean>(true);
 
@@ -46,16 +76,43 @@
 		<div class="relative">
 			<div class="h-[250px] w-full bg-ebony-clay absolute top-[-30px] z-[-1]" />
 
-			<Container>
-				<TitleHead class="uppercase text-[36px] mb-8">movies</TitleHead>
+      <Container>
+        <TitleHead class="uppercase text-[36px] mb-8">movies</TitleHead>
 
-        <div v-if="loading" class="py-40">
-          <Loading />
+        <div class="grid grid-cols-4 gap-6">
+          <div class="bg-mirage rounded-md h-max">
+            <div class="font-semibold px-4 py-3">
+              Sort Result By
+            </div>
+            <div class="border-t border-white/20 p-4 pb-7">
+              <FormSelect
+                :data="sortOptions"
+                placeholder="Popularity" 
+                trigger-size="xs"
+                v-model="sortFilter" 
+              />              
+            </div>
+            <div class="font-semibold border-t border-white/20 px-4 py-3">
+              Genres
+            </div>
+            <div class="border-t border-white/20 p-4">
+              <FormCheckbox
+                id=""
+                label="Action"
+              />
+            </div>
+          </div>
+
+          <div class="col-span-3">
+            <div v-if="loading" class="py-40">
+              <Loading />
+            </div>
+            <div v-else class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
+              <Movie v-for="(movie, i) in movies" :key="i" :movie="movie" />
+            </div>
+          </div>
         </div>
-				<div v-else class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3">
-					<Movie v-for="(movie, i) in movies" :key="i" :movie="movie" />
-				</div>
-			</Container>
+      </Container>
 		</div>
 	</div>
 </template>

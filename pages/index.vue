@@ -141,7 +141,7 @@
           <template v-else>
             <CarouselItem v-for="(trending, i) in trendings" :key="i" class="max-w-[540px] pl-8">
               <div class="flex gap-[40px] bg-black p-4">
-                <img :src="fullPathImage(trending.poster_path)" class="w-[200px] scale-125" />
+                <img :src="fullPathImage(trending.poster_path)" class="h-[300px] w-[200px] scale-125 object-fill" />
                 
                 <div class="flex flex-col gap-3 w-full">
                   <div class="flex gap-2 items-center font-semibold text-[18px]">
