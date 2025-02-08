@@ -86,12 +86,34 @@
 	<div>
     <div class="py-10">
       <Carousel class="relative py-10" :opts="{ loop: true }" :plugins="[plugin]">
-        <CarouselContent>
+        <CarouselContent v-if="carouselLoading">
+          <CarouselItem v-for="(_, i) in Array.from({ length: 6 })" :key="i" class="max-w-[540px] mx-4">
+            <div class="flex gap-[50px] bg-black animate-pulse p-3">
+              <div class="h-[300px] min-w-[200px] bg-ebony-clay scale-125" />
+              
+              <div class="flex flex-col gap-3 w-full">
+                <div class="flex gap-2 items-center font-semibold text-[18px]">
+                  <img src="../public/icon-star.svg" /> <div class="h-4 w-[20%] bg-ebony-clay" />
+                </div>
+                <div class="h-5 w-[80%] bg-ebony-clay" />
+                <div class="flex gap-[8px] items-center">
+                  <div class="h-4 w-[20%] bg-ebony-clay" /> <img src="../public/icon-ellipse.svg" /> <div class="h-4 w-[20%] bg-ebony-clay" />
+                </div>
+                <div class="h-3 w-full bg-ebony-clay" />
+                <div class="h-3 w-full bg-ebony-clay" />
+                <div class="h-3 w-full bg-ebony-clay" />
+                <div class="h-3 w-[30%] bg-ebony-clay" />
+              </div>
+            </div>
+          </CarouselItem>
+        </CarouselContent>
+
+        <CarouselContent v-else>
           <CarouselItem v-for="(trending, i) in trendings" :key="i" class="max-w-[540px] mx-4">
             <div class="flex gap-[50px] bg-black p-3">
               <img :src="fullPathImage(trending.poster_path)" class="w-[200px] scale-125" />
               
-              <div class="flex flex-col gap-3">
+              <div class="flex flex-col gap-3 w-full">
                 <div class="flex gap-3 items-center font-semibold text-[18px]">
                   <img src="../public/icon-star.svg" /> {{ roundedRating(trending.vote_average) }}
                 </div>
@@ -106,7 +128,7 @@
                 </div>
               </div>
             </div>
-          </CarouselItem>         
+          </CarouselItem>
         </CarouselContent>
       </Carousel>
 
