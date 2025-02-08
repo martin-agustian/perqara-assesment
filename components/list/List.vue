@@ -3,15 +3,18 @@
   import type { OptionsDT } from "@/commons/types";
 
   const props = defineProps<{
-    loading: boolean
+    loading?: boolean
+    loadMoreLoading?: boolean
     title: string
     sortOptions: OptionsDT[]
     genreOptions: OptionsDT[]
+    isLoadMore?: boolean
   }>();
 
   const emits = defineEmits<{
     (e: "update:genre", value: string[]): void;
 		(e: "update:sort", value: string): void;
+    (e: "click:more"): void;
 	}>();
 
   const genreFilter = ref<string[]>([]);
@@ -71,10 +74,16 @@
             <div v-if="props.loading" class="py-40">
               <Loading />
             </div>
-            <div v-else class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
-              <slot />
-              <Capsule>Load More</Capsule>
-            </div>
+            <template v-else>
+              <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 mb-10">
+                <slot />
+              </div>
+              <div v-if="isLoadMore" class="text-center mb-5">
+                <Capsule class="h-9 text-[14px]" @click="emits('click:more')">
+                  {{ props.loadMoreLoading ? 'Loading...' : 'Load More' }}
+                </Capsule>
+              </div>
+            </template>
           </div>
         </div>
       </Container>

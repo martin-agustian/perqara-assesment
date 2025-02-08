@@ -13,23 +13,37 @@
 
   const sortFilter = ref<string>('');
   const genreFilter = ref<string[]>([]);
+  const pageFilter = ref<number>(1);
+
+  const isLoadMore = ref(true);
 
   const loading = ref<boolean>(true);
+  const loadMoreLoading = ref(false);
 
   const tvShows = ref<TvShowDT[]>([]);
 
   const getTVShow = async () => {
     try {
-      loading.value = true;
-
       let params = {} as DiscoverMovieRequestDT;
       params.with_genres = genreFilter.value.toString();
-      params.sort_by = sortFilter.value as string;
+      params.sort_by = sortFilter.value;
+      params.page = pageFilter.value
 
       const discoverAPI = await DiscoverAPI.TV(params);
 
       if (discoverAPI.status === 200) {
-        tvShows.value = discoverAPI.data.results
+        let { data } = discoverAPI;
+
+        if (data.page == data.total_pages) {
+          isLoadMore.value = false;
+        }
+
+        if (loadMoreLoading.value) {
+          tvShows.value = [...tvShows.value, ...data.results];
+        }
+        else {
+          tvShows.value = data.results;
+        }
       }
     }
     catch (error) {
@@ -40,6 +54,7 @@
       });
     }
     finally {
+      loadMoreLoading.value = false;
       loading.value = false;
     }
   }
@@ -50,11 +65,19 @@
 
   const handleSort = (value: string) => {
     sortFilter.value = value;
+    loading.value = true;
     getTVShow();
   }
 
   const handleGenre = (value: string[]) => {
     genreFilter.value = value;
+    loading.value = true;
+    getTVShow();
+  }
+
+  const handleLoadMore = () => {
+    loadMoreLoading.value = true;
+    pageFilter.value += 1;
     getTVShow();
   }
 </script>
@@ -62,12 +85,14 @@
 <template>
 	<div>
     <List 
-      title="movies"
+      title="tv shows"
+      :is-load-more="isLoadMore"
       :loading="loading"
       :genre-options="genreOptions"
       :sort-options="sortTvShowOptions"
       @update:genre="handleGenre"
       @update:sort="handleSort"
+      @click:more="handleLoadMore"
     >
       <Movie 
         v-for="(tvShow, i) in tvShows" :key="i" 

@@ -11,25 +11,39 @@
   import type { DiscoverMovieRequestDT } from "@/types/requests/Discover.request";
   import type { MovieDT } from "@/types/models/Movie.model";
 
-  const sortFilter = ref<string>('');
   const genreFilter = ref<string[]>([]);
+  const sortFilter = ref<string>('');
+  const pageFilter = ref<number>(1);
+
+  const isLoadMore = ref(true);
 
   const loading = ref<boolean>(true);
+  const loadMoreLoading = ref<boolean>(true);
 
   const movies = ref<MovieDT[]>([]);
 
   const getMovie = async () => {
     try {
-      loading.value = true;
-
       let params = {} as DiscoverMovieRequestDT;
       params.with_genres = genreFilter.value.toString();
       params.sort_by = sortFilter.value;
+      params.page = pageFilter.value;
 
       const discoverAPI = await DiscoverAPI.Movie(params);
 
       if (discoverAPI.status === 200) {
-        movies.value = discoverAPI.data.results
+        let { data } = discoverAPI;
+
+        if (data.page == data.total_pages) {
+          isLoadMore.value = false;
+        }
+
+        if (loadMoreLoading.value) {
+          movies.value = [...movies.value, ...data.results];
+        }
+        else {
+          movies.value = data.results;
+        }
       }
     }
     catch (error) {
@@ -40,21 +54,31 @@
       });
     }
     finally {
+      loadMoreLoading.value = false;
       loading.value = false;
     }
   }
 
   onMounted(() => {
+    loading.value = true;
     getMovie();
   })
 
   const handleSort = (value: string) => {
     sortFilter.value = value;
+    loading.value = true;
     getMovie();
   }
 
   const handleGenre = (value: string[]) => {
     genreFilter.value = value;
+    loading.value = true;
+    getMovie();
+  }
+
+  const handleLoadMore = () => {
+    loadMoreLoading.value = true;
+    pageFilter.value += 1;
     getMovie();
   }
 </script>
@@ -63,11 +87,13 @@
   <div>
     <List 
       title="movies"
+      :is-load-more="isLoadMore"
       :loading="loading"
       :genre-options="genreOptions"
       :sort-options="sortMovieOptions"
       @update:genre="handleGenre"
       @update:sort="handleSort"
+      @click:more="handleLoadMore"
     >
       <Movie 
         v-for="(movie, i) in movies" :key="i"
