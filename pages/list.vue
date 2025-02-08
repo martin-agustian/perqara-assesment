@@ -2,90 +2,91 @@
   import Swal from "sweetalert2";
 
   // ** APIs
-  import MovieAPI from "@/apis/Movie.api";
+  import DiscoverAPI from "@/apis/Discover.api";
 
   // ** Helpers
   import { fullPathImage, fullYear, roundedRating } from "@/helpers/utils.helper";
 
   // ** Types
   import type { OptionsDT } from "@/commons/types";
+  import type { DiscoverMovieRequestDT } from "@/types/requests/Discover.request";
   import type { MovieDT } from "@/types/models/Movie.model";
 
   const sortOptions: OptionsDT[] = [
     {
       label: 'Popularity Ascending',
-      value: 'popularity'
+      value: 'popularity.asc'
     },
     {
       label: 'Popularity Descending',
-      value: 'popularity 2'
+      value: 'popularity.desc'
     },
     {
       label: 'Release Date Ascending',
-      value: 'popularity 3'
+      value: 'primary_release_date.asc'
     },
     {
       label: 'Release Date Descending',
-      value: 'popularity 4'
+      value: 'primary_release_date.desc'
     },
     {
       label: 'Rating Ascending',
-      value: 'popularity 5'
+      value: 'vote_average.asc'
     },
     {
       label: 'Rating Descending',
-      value: 'popularity 6'
+      value: 'vote_average.desc'
     },
   ];
 
   const genreOptions: OptionsDT[] = [
     {
       label: 'Action',
-      value: 'action'
+      value: '28'
     },
     {
       label: 'Adventure',
-      value: 'adventure'
+      value: '12'
     },
     {
       label: 'Animation',
-      value: 'animation'
+      value: '16'
     },
     {
       label: 'Comedy',
-      value: 'comedy'
+      value: '35'
     },
     {
       label: 'Crime',
-      value: 'crime'
+      value: '80'
     },
     {
       label: 'Documentary',
-      value: 'documentary'
+      value: '99'
     },
     {
       label: 'Drama',
-      value: 'drama'
+      value: '18'
     },
     {
       label: 'Family',
-      value: 'family'
+      value: '10751'
     },
     {
       label: 'Fantasy',
-      value: 'fantasy'
+      value: '14'
     },
     {
       label: 'History',
-      value: 'history'
+      value: '36'
     },
     {
       label: 'Horror',
-      value: 'horror'
+      value: '27'
     },
   ];
 
-  const sortFilter = defineModel<string>('sort');
+  const sortFilter = ref<String>('');
   const genreFilter = ref<String[]>([]);
 
   const loading = ref<Boolean>(true);
@@ -96,7 +97,11 @@
     try {
       loading.value = true;
 
-      const movieAPI = await MovieAPI.Popular();
+      let params = {} as DiscoverMovieRequestDT;
+      params.with_genres = genreFilter.value.toString();
+      params.sort_by = sortFilter.value as string;
+
+      const movieAPI = await DiscoverAPI.Movie(params);
 
       if (movieAPI.status === 200) {
         movies.value = movieAPI.data.results
@@ -118,13 +123,20 @@
     getMovie();
   })
 
-  const handleGenreUpdated = (option: OptionsDT, isChecked: Boolean) => {
+  const handleSort = (value: string) => {
+    sortFilter.value = value;
+    getMovie();
+  }
+
+  const handleGenre = (option: OptionsDT, isChecked: Boolean) => {
     if (isChecked) {
       genreFilter.value.push(option.value);
     }
     else {
       genreFilter.value = genreFilter.value.filter(item => item !== option.value);
     }
+
+    getMovie();
   }
 </script>
 
@@ -143,10 +155,11 @@
             </div>
             <div class="border-t border-white/20 p-4 pb-7">
               <FormSelect
+                id="sorting"
+                placeholder="Select Sorting" 
                 :data="sortOptions"
-                placeholder="Popularity" 
                 trigger-size="xs"
-                v-model="sortFilter" 
+                @update:model-value="handleSort"
               />              
             </div>
             <div class="font-semibold border-t border-white/20 px-4 py-3">
@@ -157,7 +170,7 @@
                 v-for="(option, i) in genreOptions" :key="i"
                 :id="option.value"
                 :label="option.label"
-                @update:model-value="(isChecked) => handleGenreUpdated(option, isChecked)"
+                @update:model-value="(isChecked) => handleGenre(option, isChecked)"
               />
             </div>
           </div>
