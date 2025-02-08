@@ -1,7 +1,6 @@
 <script setup lang="ts">
   import Autoplay from "embla-carousel-autoplay";
   import ClassNames from "embla-carousel-class-names";
-  import emblaCarouselVue from "embla-carousel-vue";
   import Swal from "sweetalert2";
 
   // ** APIs
@@ -12,11 +11,12 @@
   import { fullPathImage, fullYear, roundedRating } from "@/helpers/utils.helper";
 
   // ** Types
+  import type { CarouselApi } from "@/components/carousel";
   import type { MovieDT } from "@/types/models/Movie.model";
   import type { TrendingDT } from "@/types/models/Trending.model";
 
   const emblaAutoPlay = Autoplay({
-    delay: 10000,
+    delay: 5000,
     stopOnMouseEnter: true,
     stopOnInteraction: false,
   });
@@ -26,10 +26,11 @@
     inView: "opacity-50"
   });
 
-  const [emblaRef, emblaApi] = emblaCarouselVue();
+  const carouselApiRef = ref<CarouselApi>();
+  const carouselCurrentIndex = ref<number>(0);
 
   const loading = ref<Boolean>(true);
-  const carouselLoading = ref<Boolean>(true);
+  const loadingCarousel = ref<Boolean>(true);
 
   const isCapsuleIsPopular = ref<Boolean>(true);
 
@@ -38,7 +39,7 @@
 
   const getTrending = async () => {
     try {
-      carouselLoading.value = true;
+      loadingCarousel.value = true;
       
       const trendingAPI = await TrendingAPI.All();
 
@@ -54,7 +55,7 @@
       });
     }
     finally {
-      carouselLoading.value = false;
+      loadingCarousel.value = false;
     }
   }
 
@@ -85,6 +86,25 @@
     getMovie();
   })
 
+  watch(carouselApiRef, (carouselApi) => {
+    if (!carouselApi) return;
+
+    carouselApi.on('autoplay:select', (value) => {
+      carouselCurrentIndex.value = value.selectedScrollSnap();
+    });
+  })
+
+  const setCarouselAPI = (value: CarouselApi) => {
+    carouselApiRef.value = value;
+  }
+
+  const handleCarouselScrollToIndex = (index: number) => {
+    if (carouselApiRef.value) {
+      carouselApiRef.value.scrollTo(index);
+      carouselCurrentIndex.value = carouselApiRef.value.selectedScrollSnap();
+    }
+  }
+
   const handleCapsuleUpdate = (value: Boolean) => {
     isCapsuleIsPopular.value = value;
     getMovie();
@@ -94,10 +114,10 @@
 <template>
 	<div>
     <div class="py-10">
-      <Carousel class="relative py-10" :opts="{ loop: true, align: 'center' }" :plugins="[emblaAutoPlay, emblaClassNames]">
-        <CarouselContent>
-          <template v-if="carouselLoading">          
-            <CarouselItem v-for="(_, i) in Array.from({ length: 6 })" :key="i" class="max-w-[540px] mx-2">
+      <Carousel @init-api="setCarouselAPI" class="relative py-10" :opts="{ loop: true, align: 'center' }" :plugins="[emblaAutoPlay, emblaClassNames]">
+        <CarouselContent class="-ml-8">
+          <template v-if="loadingCarousel">
+            <CarouselItem v-for="(_, i) in Array.from({ length: 6 })" :key="i" class="max-w-[540px] pl-8">
               <div class="flex gap-[40px] bg-black animate-pulse p-4">
                 <div class="h-[300px] min-w-[200px] bg-ebony-clay scale-125" />
                 
@@ -119,7 +139,7 @@
           </template>
 
           <template v-else>
-            <CarouselItem v-for="(trending, i) in trendings" :key="i" class="max-w-[540px] mx-2">
+            <CarouselItem v-for="(trending, i) in trendings" :key="i" class="max-w-[540px] pl-8">
               <div class="flex gap-[40px] bg-black p-4">
                 <img :src="fullPathImage(trending.poster_path)" class="w-[200px] scale-125" />
                 
@@ -144,7 +164,11 @@
       </Carousel>
 
       <div class="flex space-x-3 justify-center mt-10">
-        <button type="button" v-for="(_, i) in trendings" :key="i" class="w-3 h-3 bg-mountain-mist rounded-full" />
+        <button
+          v-for="(_, i) in trendings" :key="i" 
+          :class="`h-3 ${carouselCurrentIndex == i ? 'w-10 bg-carmine-pink' : 'w-3 bg-mountain-mist'} rounded-full`"
+          @click="handleCarouselScrollToIndex(i)" 
+        />
       </div>
     </div>
 
