@@ -37,7 +37,7 @@
 </script>
 
 <template>
-	<div :class="cn('relative', props.class)" role="region" aria-roledescription="carousel" tabindex="0" @keydown="onKeyDown">
+	<div :class="cn('relative overflow-x-hidden', props.class)" role="region" aria-roledescription="carousel" tabindex="0" @keydown="onKeyDown">
 		<slot v-bind="carouselArgs" />
 	</div>
 </template>
