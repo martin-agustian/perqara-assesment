@@ -19,7 +19,7 @@
 
 <template>
   <div :class="cn('flex items-center justify-between space-x-2', props.class)">
-    <label :for="props.id" :class="cn('text-sm text-white font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer', props.classLabel)">
+    <label :for="props.id" :class="cn('text-sm text-white leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer', props.classLabel)">
       {{ props.label }}
     </label>
 		<Checkbox :id="props.id" :checked="modelValue" @update:checked="(value) => model = value" :disabled="disabled" />    

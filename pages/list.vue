@@ -38,7 +38,55 @@
     },
   ];
 
-  const sortFilter = defineModel<string>('');
+  const genreOptions: OptionsDT[] = [
+    {
+      label: 'Action',
+      value: 'action'
+    },
+    {
+      label: 'Adventure',
+      value: 'adventure'
+    },
+    {
+      label: 'Animation',
+      value: 'animation'
+    },
+    {
+      label: 'Comedy',
+      value: 'comedy'
+    },
+    {
+      label: 'Crime',
+      value: 'crime'
+    },
+    {
+      label: 'Documentary',
+      value: 'documentary'
+    },
+    {
+      label: 'Drama',
+      value: 'drama'
+    },
+    {
+      label: 'Family',
+      value: 'family'
+    },
+    {
+      label: 'Fantasy',
+      value: 'fantasy'
+    },
+    {
+      label: 'History',
+      value: 'history'
+    },
+    {
+      label: 'Horror',
+      value: 'horror'
+    },
+  ];
+
+  const sortFilter = defineModel<string>('sort');
+  const genreFilter = ref<String[]>([]);
 
   const loading = ref<Boolean>(true);
 
@@ -69,6 +117,15 @@
   onMounted(() => {
     getMovie();
   })
+
+  const handleGenreUpdated = (option: OptionsDT, isChecked: Boolean) => {
+    if (isChecked) {
+      genreFilter.value.push(option.value);
+    }
+    else {
+      genreFilter.value = genreFilter.value.filter(item => item !== option.value);
+    }
+  }
 </script>
 
 <template>
@@ -95,10 +152,12 @@
             <div class="font-semibold border-t border-white/20 px-4 py-3">
               Genres
             </div>
-            <div class="border-t border-white/20 p-4">
+            <div class="flex flex-col gap-y-5 border-t border-white/20 p-4">
               <FormCheckbox
-                id=""
-                label="Action"
+                v-for="(option, i) in genreOptions" :key="i"
+                :id="option.value"
+                :label="option.label"
+                @update:model-value="(isChecked) => handleGenreUpdated(option, isChecked)"
               />
             </div>
           </div>
