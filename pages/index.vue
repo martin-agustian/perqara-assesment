@@ -20,6 +20,7 @@
   });
 
   const loading = ref<Boolean>(true);
+  const carouselLoading = ref<Boolean>(true);
 
   const isCapsuleIsPopular = ref<Boolean>(true);
 
@@ -28,7 +29,7 @@
 
   const getTrending = async () => {
     try {
-      loading.value = true;
+      carouselLoading.value = true;
       
       const trendingAPI = await TrendingAPI.All();
 
@@ -44,7 +45,7 @@
       });
     }
     finally {
-      loading.value = false;
+      carouselLoading.value = false;
     }
   }
 
@@ -86,12 +87,12 @@
     <div class="py-10">
       <Carousel class="relative py-10" :opts="{ loop: true }" :plugins="[plugin]">
         <CarouselContent>
-          <CarouselItem v-for="(trending, i) in trendings" :key="i" class="max-w-[540px] mx-[10px]">
+          <CarouselItem v-for="(trending, i) in trendings" :key="i" class="max-w-[540px] mx-4">
             <div class="flex gap-[50px] bg-black p-3">
               <img :src="fullPathImage(trending.poster_path)" class="w-[200px] scale-125" />
               
-              <div class="flex flex-col gap-[5px]">
-                <div class="flex gap-[5px] items-center font-semibold text-[18px]">
+              <div class="flex flex-col gap-3">
+                <div class="flex gap-3 items-center font-semibold text-[18px]">
                   <img src="../public/icon-star.svg" /> {{ roundedRating(trending.vote_average) }}
                 </div>
                 <div class="text-[25px] font-medium">
@@ -110,7 +111,7 @@
       </Carousel>
 
       <div class="flex space-x-3 justify-center mt-10">
-        <button type="button" v-for="(_, i) in trendings" :key="i" class="w-3 h-3 bg-mountain-mist rounded-full"></button>
+        <button type="button" v-for="(_, i) in trendings" :key="i" class="w-3 h-3 bg-mountain-mist rounded-full" />
       </div>
     </div>
 
@@ -121,7 +122,7 @@
 				<div class="flex justify-between items-center mb-5">
 					<TitleHead>discover movie</TitleHead>
 
-					<div class="flex gap-[10px]">
+					<div class="flex gap-3">
 						<Capsule 
               :variant="isCapsuleIsPopular ? 'primary' : 'secondary'"
               @click="handleCapsuleUpdate(true)"
@@ -137,7 +138,10 @@
 					</div>
 				</div>
 
-				<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-[15px]">
+        <div v-if="loading" class="py-40">
+          <Loading />
+        </div>
+				<div v-else class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3">
 					<Movie v-for="(movie, i) in movies" :key="i" :movie="movie" />
 				</div>
 			</Container>
