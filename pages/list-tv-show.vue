@@ -10,7 +10,7 @@
   // ** Types
   import type { OptionsDT } from "@/commons/types";
   import type { DiscoverMovieRequestDT } from "@/types/requests/Discover.request";
-  import type { MovieDT } from "@/types/models/Movie.model";
+  import type { TvShowDT } from "@/types/models/TvShow.model";
 
   const sortOptions: OptionsDT[] = [
     {
@@ -23,11 +23,11 @@
     },
     {
       label: 'Release Date Ascending',
-      value: 'primary_release_date.asc'
+      value: 'first_air_date.asc'
     },
     {
       label: 'Release Date Descending',
-      value: 'primary_release_date.desc'
+      value: 'first_air_date.desc'
     },
     {
       label: 'Rating Ascending',
@@ -91,9 +91,9 @@
 
   const loading = ref<Boolean>(true);
 
-  const movies = ref<MovieDT[]>([]);
+  const tvShows = ref<TvShowDT[]>([]);
 
-  const getMovie = async () => {
+  const getTVShow = async () => {
     try {
       loading.value = true;
 
@@ -101,10 +101,10 @@
       params.with_genres = genreFilter.value.toString();
       params.sort_by = sortFilter.value as string;
 
-      const discoverAPI = await DiscoverAPI.Movie(params);
+      const discoverAPI = await DiscoverAPI.TV(params);
 
       if (discoverAPI.status === 200) {
-        movies.value = discoverAPI.data.results
+        tvShows.value = discoverAPI.data.results
       }
     }
     catch (error) {
@@ -120,12 +120,12 @@
   }
 
   onMounted(() => {
-    getMovie();
+    getTVShow();
   })
 
   const handleSort = (value: string) => {
     sortFilter.value = value;
-    getMovie();
+    getTVShow();
   }
 
   const handleGenre = (option: OptionsDT, isChecked: Boolean) => {
@@ -136,7 +136,7 @@
       genreFilter.value = genreFilter.value.filter(item => item !== option.value);
     }
 
-    getMovie();
+    getTVShow();
   }
 </script>
 
@@ -146,7 +146,7 @@
 			<div class="h-[250px] w-full bg-ebony-clay absolute top-[-30px] z-[-1]" />
 
       <Container>
-        <TitleHead class="uppercase text-[36px] mb-8">movies</TitleHead>
+        <TitleHead class="uppercase text-[36px] mb-8">tv shows</TitleHead>
 
         <div class="grid grid-cols-4 gap-6">
           <div class="bg-mirage rounded-md h-max">
@@ -180,7 +180,13 @@
               <Loading />
             </div>
             <div v-else class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
-              <Movie v-for="(movie, i) in movies" :key="i" :movie="movie" />
+              <Movie 
+                v-for="(tvShow, i) in tvShows" :key="i" 
+                :title="tvShow.name"
+                :poster-path="tvShow.poster_path" 
+                :release-date="tvShow.first_air_date"
+                :vote-average="tvShow.vote_average"
+              />
             </div>
           </div>
         </div>

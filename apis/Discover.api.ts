@@ -10,8 +10,12 @@ function Movie(params?: DiscoverMovieRequestDT) {
   return useAxios().get("/" + path + "/movie", { params: params });
 }
 
+function TV(params?: DiscoverMovieRequestDT) {
+  return useAxios().get("/" + path + "/tv", { params: params });
+}
+
 const DiscoverAPI = { 
-  Movie
+  Movie, TV
 };
 
 export default DiscoverAPI;

@@ -13,8 +13,8 @@
         <li class="flex gap-[5px] items-center cursor-pointer">
           <img src="../../public/icon-grid.svg" class="size-[20px]"> categories
         </li>
-        <li class="cursor-pointer" @click="navigateTo('/list')">movies</li>
-        <li class="cursor-pointer">tv shows</li>
+        <li class="cursor-pointer" @click="navigateTo('/list-movie')">movies</li>
+        <li class="cursor-pointer" @click="navigateTo('/list-tv-show')">tv shows</li>
         <li class="cursor-pointer">login</li>
       </ul>
     </Container>
