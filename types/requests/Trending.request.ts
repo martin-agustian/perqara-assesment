@@ -1,1 +1,1 @@
-export type TrendingRequestDT = {};
+export type AllTrendingRequestDT = {};

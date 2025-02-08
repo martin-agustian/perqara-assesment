@@ -3,13 +3,15 @@
   import Swal from "sweetalert2";
 
   // ** APIs
+  import MovieAPI from "@/apis/Movie.api";
   import TrendingAPI from "@/apis/Trending.api";
 
-  // ** Types
-  import type { TrendingDT } from "@/types/models/Trending.model";
-
   // ** Helpers
-  import { imageFullPath } from "@/helpers/utils.helper";
+  import { fullPathImage } from "@/helpers/utils.helper";
+
+  // ** Types
+  import type { MovieDT } from "@/types/models/Movie.model";
+  import type { TrendingDT } from "@/types/models/Trending.model";
 
   const plugin = Autoplay({
     delay: 3000,
@@ -18,6 +20,8 @@
   });
 
   const loading = ref<Boolean>(true);
+
+  const movies = ref<MovieDT[]>([]);
   const trendings = ref<TrendingDT[]>([]);
 
   const getTrending = async () => {
@@ -42,8 +46,31 @@
     }
   }
 
+  const getMovie = async () => {
+    try {
+      loading.value = true;
+
+      let movieAPI = await MovieAPI.Popular();
+
+      if (movieAPI.status === 200) {
+        movies.value = movieAPI.data.results
+      }
+    }
+    catch (error) {
+      await Swal.fire({
+        title: "Error!",
+        text: error as string,
+        icon: "error"
+      });
+    }
+    finally {
+      loading.value = false;
+    }
+  }
+
   onMounted(async () => {
-    getTrending()
+    getTrending();
+    getMovie();
   })
 </script>
 
@@ -54,7 +81,7 @@
         <CarouselContent>
           <CarouselItem v-for="(treding, i) in trendings" :key="i" class="max-w-[540px] mx-[10px]">
             <div class="flex gap-[50px] bg-black p-3">
-              <img :src="imageFullPath(treding.poster_path)" class="w-[200px] scale-125" />
+              <img :src="fullPathImage(treding.poster_path)" class="w-[200px] scale-125" />
               
               <div class="flex flex-col gap-[5px]">
                 <div class="flex gap-[5px] items-center font-semibold text-[18px]">
@@ -95,11 +122,7 @@
 				</div>
 
 				<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-[15px]">
-					<Movie />
-					<Movie />
-					<Movie />
-					<Movie />
-					<Movie />
+					<Movie v-for="(movie, i) in movies" :key="i" :movie="movie" />
 				</div>
 			</Container>
 		</div>

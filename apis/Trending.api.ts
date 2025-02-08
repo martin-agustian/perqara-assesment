@@ -1,12 +1,12 @@
 import { useAxios } from "@/composable/useAxios";
 
 // ** Types
-import type { TrendingRequestDT } from "@/types/requests/Trending.request";
+import type { AllTrendingRequestDT } from "@/types/requests/Trending.request";
 
 // ** Paths
 const path = "trending";
 
-function All(params?: TrendingRequestDT) {
+function All(params?: AllTrendingRequestDT) {
   return useAxios().get("/" + path + "/all/day", params);
 }
 
