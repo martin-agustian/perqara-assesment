@@ -4,92 +4,17 @@
   // ** APIs
   import DiscoverAPI from "@/apis/Discover.api";
 
-  // ** Helpers
-  import { fullPathImage, fullYear, roundedRating } from "@/helpers/utils.helper";
+  // ** Options
+  import { genreOptions, sortTvShowOptions } from "@/commons/options";
 
   // ** Types
-  import type { OptionsDT } from "@/commons/types";
   import type { DiscoverMovieRequestDT } from "@/types/requests/Discover.request";
   import type { TvShowDT } from "@/types/models/TvShow.model";
 
-  const sortOptions: OptionsDT[] = [
-    {
-      label: 'Popularity Ascending',
-      value: 'popularity.asc'
-    },
-    {
-      label: 'Popularity Descending',
-      value: 'popularity.desc'
-    },
-    {
-      label: 'Release Date Ascending',
-      value: 'first_air_date.asc'
-    },
-    {
-      label: 'Release Date Descending',
-      value: 'first_air_date.desc'
-    },
-    {
-      label: 'Rating Ascending',
-      value: 'vote_average.asc'
-    },
-    {
-      label: 'Rating Descending',
-      value: 'vote_average.desc'
-    },
-  ];
+  const sortFilter = ref<string>('');
+  const genreFilter = ref<string[]>([]);
 
-  const genreOptions: OptionsDT[] = [
-    {
-      label: 'Action',
-      value: '28'
-    },
-    {
-      label: 'Adventure',
-      value: '12'
-    },
-    {
-      label: 'Animation',
-      value: '16'
-    },
-    {
-      label: 'Comedy',
-      value: '35'
-    },
-    {
-      label: 'Crime',
-      value: '80'
-    },
-    {
-      label: 'Documentary',
-      value: '99'
-    },
-    {
-      label: 'Drama',
-      value: '18'
-    },
-    {
-      label: 'Family',
-      value: '10751'
-    },
-    {
-      label: 'Fantasy',
-      value: '14'
-    },
-    {
-      label: 'History',
-      value: '36'
-    },
-    {
-      label: 'Horror',
-      value: '27'
-    },
-  ];
-
-  const sortFilter = ref<String>('');
-  const genreFilter = ref<String[]>([]);
-
-  const loading = ref<Boolean>(true);
+  const loading = ref<boolean>(true);
 
   const tvShows = ref<TvShowDT[]>([]);
 
@@ -128,69 +53,29 @@
     getTVShow();
   }
 
-  const handleGenre = (option: OptionsDT, isChecked: Boolean) => {
-    if (isChecked) {
-      genreFilter.value.push(option.value);
-    }
-    else {
-      genreFilter.value = genreFilter.value.filter(item => item !== option.value);
-    }
-
+  const handleGenre = (value: string[]) => {
+    genreFilter.value = value;
     getTVShow();
   }
 </script>
 
 <template>
 	<div>
-		<div class="relative">
-			<div class="h-[250px] w-full bg-ebony-clay absolute top-[-30px] z-[-1]" />
-
-      <Container>
-        <TitleHead class="uppercase text-[36px] mb-8">tv shows</TitleHead>
-
-        <div class="grid grid-cols-4 gap-6">
-          <div class="bg-mirage rounded-md h-max">
-            <div class="font-semibold px-4 py-3">
-              Sort Result By
-            </div>
-            <div class="border-t border-white/20 p-4 pb-7">
-              <FormSelect
-                id="sorting"
-                placeholder="Select Sorting" 
-                :data="sortOptions"
-                trigger-size="xs"
-                @update:model-value="handleSort"
-              />              
-            </div>
-            <div class="font-semibold border-t border-white/20 px-4 py-3">
-              Genres
-            </div>
-            <div class="flex flex-col gap-y-5 border-t border-white/20 p-4">
-              <FormCheckbox
-                v-for="(option, i) in genreOptions" :key="i"
-                :id="option.value"
-                :label="option.label"
-                @update:model-value="(isChecked) => handleGenre(option, isChecked)"
-              />
-            </div>
-          </div>
-
-          <div class="col-span-3">
-            <div v-if="loading" class="py-40">
-              <Loading />
-            </div>
-            <div v-else class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
-              <Movie 
-                v-for="(tvShow, i) in tvShows" :key="i" 
-                :title="tvShow.name"
-                :poster-path="tvShow.poster_path" 
-                :release-date="tvShow.first_air_date"
-                :vote-average="tvShow.vote_average"
-              />
-            </div>
-          </div>
-        </div>
-      </Container>
-		</div>
+    <List 
+      title="movies"
+      :loading="loading"
+      :genre-options="genreOptions"
+      :sort-options="sortTvShowOptions"
+      @update:genre="handleGenre"
+      @update:sort="handleSort"
+    >
+      <Movie 
+        v-for="(tvShow, i) in tvShows" :key="i" 
+        :title="tvShow.name"
+        :poster-path="tvShow.poster_path" 
+        :release-date="tvShow.first_air_date"
+        :vote-average="tvShow.vote_average"
+      />
+    </List>
 	</div>
 </template>
