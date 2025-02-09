@@ -94,13 +94,18 @@
     @update:sort="handleSort"
     @click:more="handleLoadMore"
   >
-    <Movie 
-      v-for="(tvShow, i) in tvShows" :key="i" 
-      :id="tvShow.id"
-      :title="tvShow.name"
-      :poster-path="tvShow.poster_path" 
-      :release-date="tvShow.first_air_date"
-      :vote-average="tvShow.vote_average"
-    />
+    <template v-if="tvShows.length > 0">
+      <Movie 
+        v-for="(tvShow, i) in tvShows" :key="i" 
+        :id="tvShow.id"
+        :title="tvShow.name"
+        :poster-path="tvShow.poster_path" 
+        :release-date="tvShow.first_air_date"
+        :vote-average="tvShow.vote_average"
+      />
+    </template>
+    <div v-else class="text-white text-[18px] font-semibold mt-3">
+      TV Show is not found
+    </div>
   </List>
 </template>

@@ -130,7 +130,7 @@
         </Container>
   
         <div class="h-[500px] relative bg-transparent">
-          <img :src="toFullPathImage(movie.backdrop_path, 'original')" class="absolute bg-no-repeat bg-center bg-cover inset-0 brightness-50 z-[-1]">
+          <img :src="toFullPathImage(movie.backdrop_path, 'original')" class="absolute bg-no-repeat bg-center bg-cover w-full inset-0 brightness-50 z-[-1]">
           <Container class="flex items-end h-full pl-72">
             <div>
               <div class="text-[18px]">
