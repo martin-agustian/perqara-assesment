@@ -1,8 +1,9 @@
 import { useAxios } from "@/composable/useAxios";
 
 // ** Types
-import type { 
+import type {
   MovieDetailRequestDT, 
+  MovieRecommendationRequestDT, 
   MovieReviewRequestDT 
 } from "@/types/requests/Movie.request";
 
@@ -17,8 +18,12 @@ function Review(movieId: number, params?: MovieReviewRequestDT) {
   return useAxios().get("/" + path + "/" + movieId + "/reviews", params);
 }
 
+function Recommendation(movieId: number, params?: MovieRecommendationRequestDT) {
+  return useAxios().get("/" + path + "/" + movieId + "/recommendations", params);
+}
+
 const MovieAPI = { 
-  Detail, Review
+  Detail, Review, Recommendation
 };
 
 export default MovieAPI;
