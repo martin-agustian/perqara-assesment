@@ -109,7 +109,7 @@
         />
       </div>
     </PopoverAnchor>
-    <PopoverContent class="z-[99] h-auto max-h-96 min-w-32 overflow-y-scroll rounded-md border p-0" :style="{ width: popoverWidth }">
+    <PopoverContent class="h-auto max-h-96 min-w-32 bg-black text-white overflow-y-scroll border-0 rounded-md z-[99] p-0" :style="{ width: popoverWidth }">
       <div v-if="props.optionLoading" class="p-1">
         <div :class="cn('relative flex w-full select-none items-center rounded-sm ' + 
           'py-1.5 pl-2 pr-8 text-sm outline-none data-[disabled]:pointer-events-none ' + 

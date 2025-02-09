@@ -1,25 +1,18 @@
 import { useAxios } from "@/composable/useAxios";
 
-// ** Types
-import type {
-  MovieDetailRequestDT, 
-  MovieRecommendationRequestDT, 
-  MovieReviewRequestDT 
-} from "@/types/requests/Movie.request";
-
 // ** Paths
 const path = "movie";
 
-function Detail(movieId: number, params?: MovieDetailRequestDT) {
-  return useAxios().get("/" + path + "/" + movieId, params);
+function Detail(movieId: number) {
+  return useAxios().get("/" + path + "/" + movieId);
 }
 
-function Review(movieId: number, params?: MovieReviewRequestDT) {
-  return useAxios().get("/" + path + "/" + movieId + "/reviews", params);
+function Review(movieId: number) {
+  return useAxios().get("/" + path + "/" + movieId + "/reviews");
 }
 
-function Recommendation(movieId: number, params?: MovieRecommendationRequestDT) {
-  return useAxios().get("/" + path + "/" + movieId + "/recommendations", params);
+function Recommendation(movieId: number) {
+  return useAxios().get("/" + path + "/" + movieId + "/recommendations");
 }
 
 const MovieAPI = { 

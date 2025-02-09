@@ -1,5 +1,58 @@
 <script setup lang="ts">
-  const autcomplete = defineModel<string>('');
+  import Swal from 'sweetalert2';
+
+  // ** APIs
+  import SearchAPI from '@/apis/Search.api';
+
+  // ** Helper
+  import { toFullYear } from '@/helpers/utils.helper';
+
+  // ** Types
+  import type { OptionsDT } from '@/commons/types';
+  import type { SearchMovieRequestDT } from '@/types/requests/Search.request';
+  import type { MovieDT } from '@/types/models/Movie.model';
+
+  const loadingQuery = ref<boolean>(false);
+
+  const movieQuery = ref<string>('');
+  const movieOptions = ref<OptionsDT[]>([]);
+
+  const movies = ref<MovieDT[]>([]);
+
+  const getMovies = async () => {
+    try {
+      let params = {} as SearchMovieRequestDT;
+      params.query = movieQuery.value;
+
+      const searchAPI = await SearchAPI.Movie(params);
+
+      if (searchAPI.status === 200) {
+        const { results } = searchAPI.data;
+
+        movies.value = results;        
+        movieOptions.value = movies.value.map(movie => ({
+          label: `${movie.title} ${movie.release_date ? '('+toFullYear(movie.release_date)+')' : ''}`,
+          value: movie.id.toString()
+        }))
+      }
+    }
+    catch (error) {
+      await Swal.fire({
+        title: "Error!",
+        text: error as string,
+        icon: "error"
+      });
+    }
+    finally {
+      loadingQuery.value = false;
+    }
+  }
+  
+  const handleAutocomplete = (value: string) => {
+    loadingQuery.value = true;
+    movieQuery.value = value;
+    getMovies();
+  }
 </script>
 
 <template>
@@ -11,9 +64,9 @@
         <img src="../../public/icon-movie.svg" class="size-[24px] absolute left-[10px] top-[50%] translate-y-[-50%] z-10">
         <FormAutocomplete
           placeholder="Find Movie"
-          :options="[]"
-          :optionLoading="false"
-          v-model="autcomplete"
+          :options="movieOptions"
+          :optionLoading="loadingQuery"
+          @update:modelValue="handleAutocomplete"
         />
         <img src="../../public/icon-search.svg" class="size-[16px] absolute right-[10px] top-[50%] translate-y-[-50%] z-10">
       </div>      
