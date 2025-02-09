@@ -49,14 +49,12 @@
   <div v-if="movie">
       <div class="">
         <div class="relative">
-          <Container class="absolute bottom-[0px] left-[50%] translate-x-[-50%]">
+          <Container class="absolute top-[320px] left-[50%] translate-x-[-50%] z-10">
             <img :src="fullPathImage(movie.poster_path)" class="h-[350px]">
           </Container>
 
-          <div
-            class="h-[380px] bg-no-repeat bg-center bg-cover"
-            :style="{ backgroundImage: `url(${fullPathImage(movie.backdrop_path, 'original')})` }" 
-          >
+          <div class="h-[500px] relative bg-transparent">
+            <img :src="fullPathImage(movie.backdrop_path, 'original')" class="absolute bg-no-repeat bg-center bg-cover inset-0 brightness-50 z-[-1]">
             <Container class="flex items-end h-full pl-72">
               <div>
                 <div class="text-[18px]">
@@ -86,8 +84,8 @@
                     <div class="uppercase text-white/50">
                       user score
                     </div>
-                    <div>
-                      {{ movie.vote_count }}
+                    <div class="uppercase">
+                      {{ movie.vote_count }} votes
                     </div>
                   </div>
                 </div>
@@ -98,8 +96,8 @@
                   <div class="uppercase text-white/50">
                     status
                   </div>
-                  <div>
-                    {{ movie.vote_count }}
+                  <div class="uppercase">
+                    {{ movie.status }}
                   </div>
                 </div>
   
@@ -109,7 +107,7 @@
                   <div class="uppercase text-white/50">
                     language
                   </div>
-                  <div>
+                  <div class="uppercase">
                     {{ movie.vote_count }}
                   </div>
                 </div>
@@ -120,8 +118,8 @@
                   <div class="uppercase text-white/50">
                     budget
                   </div>
-                  <div>
-                    {{ movie.vote_count }}
+                  <div class="uppercase">
+                    {{ movie.budget }}
                   </div>
                 </div>
   
@@ -131,8 +129,8 @@
                   <div class="uppercase text-white/50">
                     production
                   </div>
-                  <div>
-                    {{ movie.vote_count }}
+                  <div class="uppercase">
+                    {{ movie.production_companies[0].name }}
                   </div>
                 </div>
   
