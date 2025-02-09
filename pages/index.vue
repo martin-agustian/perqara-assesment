@@ -151,27 +151,29 @@
           <template v-else>
             <CarouselItem v-for="(trending, i) in trendings" :key="i" class="max-w-[540px] pl-8">
               <div class="flex gap-[40px] bg-black p-4">
-                <img 
+                <img
                   :src="toFullPathImage(trending.poster_path)" 
                   class="h-[300px] w-[200px] scale-125 object-fill cursor-pointer"
                   @click="navigateTo(`/detail/${trending.id}`)" 
                 />
                 
-                <div class="flex flex-col gap-3 w-full">
+                <div class="flex flex-col gap-x-2 gap-y-3 w-full">
                   <div class="flex gap-2 items-center font-semibold text-[18px]">
-                    <img src="../public/icon-star.svg" /> {{ toRoundedRating(trending.vote_average) }}
+                    <img src="../public/icon-star.svg" /> {{ toRoundedRating(trending.vote_average) ?? '-' }}
                   </div>
                   <div 
                     class="text-[25px] font-medium hover:text-carmine-pink cursor-pointer"
                     @click="navigateTo(`/detail/${trending.id}`)"
                   >
-                    {{ trending.name }}
+                    {{ (trending.media_type == 'tv' ? trending.name : trending.title) ?? '-' }}
                   </div>
                   <div class="text-[16px] flex gap-[8px] items-center">
-                    {{ toFullYear(trending.first_air_date) }} <img src="../public/icon-ellipse.svg" /> Sci-Fi
+                    {{ toFullYear(trending.media_type == 'tv' ? trending.first_air_date : trending.release_date) ?? '-' }} 
+                    <img src="../public/icon-ellipse.svg" /> 
+                    Sci-Fi
                   </div>
-                  <div class="text-[12px]">
-                    {{ trending.overview }}
+                  <div class="text-[12px] line-clamp-6">
+                    {{ trending.overview ?? '-' }}
                   </div>
                 </div>
               </div>

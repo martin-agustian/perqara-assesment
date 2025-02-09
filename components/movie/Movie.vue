@@ -21,7 +21,7 @@
       <img v-if="props.posterPath" :src="toFullPathImage(props.posterPath)" class="h-[296px] w-full object-center">
       <img v-else src="/public/the-movie-db-logo.svg" class="h-[296px] w-full object-center p-4">
     </div>
-    <div class="text-[16px] font-semibold cursor-pointer hover:text-carmine-pink mt-3" @click="navigateTo(`/detail/${props.id}`)">
+    <div class="text-[16px] font-semibold cursor-pointer hover:text-carmine-pink" @click="navigateTo(`/detail/${props.id}`)">
       {{ props.title }}
     </div>
     <div class="text-[14px] text-olso-grey">
