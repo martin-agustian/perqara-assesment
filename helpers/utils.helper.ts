@@ -34,3 +34,11 @@ export const toMoney = (value: number) => {
     currency: 'USD',
   }).format(value);
 }
+
+export const setSpaceClear = (value: string): string => {
+	return value.replace(/\s+/g, '');
+}
+
+export const setLetterClear = (value: string): string => {
+	return value.replace(/[^\d]/g, '');
+}
