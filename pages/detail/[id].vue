@@ -7,6 +7,9 @@
   // ** Helpers
   import { toFullDate, toFullPathImage, toFullYear, toMoney, toRoundedRating } from "@/helpers/utils.helper";
 
+  // ** Icons
+  import IconStar from '@/assets/images/icon-star.svg';
+
   // ** Types
   import type { MovieDT } from "@/types/models/Movie.model";
   import type { ReviewDT } from "@/types/models/Review.model";
@@ -114,7 +117,7 @@
 
             <div class="flex gap-4 items-center">
               <div class="flex gap-3 items-center">
-                <img src="/public/icon-star.svg" class="size-[36px]" /> 
+                <img :src="IconStar" class="size-[36px]" /> 
                 <div class="text-[28px] font-semibold">
                   {{ toRoundedRating(movie.vote_average) ?? 0 }}
                 </div>            
@@ -213,7 +216,7 @@
 
               <div class="bg-green-white rounded-md p-3">
                 <div class="flex gap-2 items-start">
-                  <img src="/public/icon-star.svg" class="size-[20px]" /> 
+                  <img :src="IconStar" class="size-[20px]" /> 
                   <div class="text-[28px] font-semibold leading-none">
                     {{ toRoundedRating(review.author_details.rating) }}
                   </div>            

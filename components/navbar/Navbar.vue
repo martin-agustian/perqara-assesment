@@ -7,6 +7,11 @@
   // ** Helper
   import { toFullYear } from '@/helpers/utils.helper';
 
+  // ** Icons
+  import IconMovie from '@/assets/images/icon-movie.svg';
+  import IconSearch from '@/assets/images/icon-search.svg';
+  import IconGrid from '@/assets/images/icon-grid.svg';
+
   // ** Options
   import { genreOptions } from '@/commons/options';
 
@@ -66,10 +71,10 @@
 <template>
   <div class="bg-ebony-clay text-white uppercase p-[15px]">
     <Container class="flex justify-between items-center gap-[35px] !py-0">
-      <img src="../../public/logo.svg" class="cursor-pointer" @click="navigateTo('/')">
+      <img src="/public/logo.svg" class="cursor-pointer" @click="navigateTo('/')">
 
       <div class="relative flex-1">
-        <img src="../../public/icon-movie.svg" class="size-[24px] absolute left-[10px] top-[50%] translate-y-[-50%] z-10">
+        <img :src="IconMovie" class="size-[24px] absolute left-[10px] top-[50%] translate-y-[-50%] z-10">
         <FormAutocomplete
           id="input-movie"
           placeholder="Find Movie"
@@ -79,14 +84,14 @@
           @update:modelValue="handleAutocomplete"
           @click:options="handleAutocompleteOption"
         />
-        <img src="../../public/icon-search.svg" class="size-[16px] absolute right-[10px] top-[50%] translate-y-[-50%] z-10">
+        <img :src="IconSearch" class="size-[16px] absolute right-[10px] top-[50%] translate-y-[-50%] z-10">
       </div>      
 
       <ul class="flex gap-[25px] text-[13px] font-semibold">
         <Popover>
           <PopoverTrigger as-child>
             <li class="flex gap-[5px] items-center cursor-pointer">
-              <img src="../../public/icon-grid.svg" class="size-[20px]"> categories
+              <img :src="IconGrid" class="size-[20px]"> categories
             </li>
           </PopoverTrigger>
           <PopoverContent class="w-min">

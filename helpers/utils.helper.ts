@@ -9,7 +9,7 @@ export const cn = (...inputs: ClassValue[]) => {
 }
 
 export const toFullPathImage = (value: string, size: string = 'w500') => {
-  return value ? `https://image.tmdb.org/t/p/${size}${value}` : `../../public/the-movie-db-logo.svg`;
+  return value ? `https://image.tmdb.org/t/p/${size}${value}` : `/public/the-movie-db-logo.svg`;
 }
 
 export const toFullDate = (value: string) => {

@@ -10,6 +10,13 @@
   // ** Helpers
   import { toFullPathImage, toFullYear, toRoundedRating } from "@/helpers/utils.helper";
 
+  // ** Icons
+  import IconStar from '@/assets/images/icon-star.svg';
+  import IconEllipse from '@/assets/images/icon-ellipse.svg';
+
+  // ** Options
+  import { genreOptions } from "@/commons/options";
+
   // ** Types
   import type { CarouselApi } from "@/components/carousel";
   import type { DiscoverMovieRequestDT } from "@/types/requests/Discover.request";
@@ -123,7 +130,7 @@
 
 <template>
 	<div>
-    <div class="py-10">
+    <div class="relative py-10">
       <Carousel @init-api="setCarouselAPI" class="relative py-10" :opts="{ loop: true, align: 'center' }" :plugins="[emblaAutoPlay, emblaClassNames]">
         <CarouselContent class="-ml-8">
           <template v-if="loadingCarousel">
@@ -133,11 +140,11 @@
                 
                 <div class="flex flex-col gap-3 w-full">
                   <div class="flex gap-2 items-center font-semibold text-[18px]">
-                    <img src="../public/icon-star.svg" /> <div class="h-4 w-[20%] bg-ebony-clay" />
+                    <img :src="IconStar" /> <div class="h-4 w-[20%] bg-ebony-clay" />
                   </div>
                   <div class="h-5 w-[80%] bg-ebony-clay" />
                   <div class="flex gap-[8px] items-center">
-                    <div class="h-4 w-[20%] bg-ebony-clay" /> <img src="../public/icon-ellipse.svg" /> <div class="h-4 w-[20%] bg-ebony-clay" />
+                    <div class="h-4 w-[20%] bg-ebony-clay" /> <img :src="IconEllipse" /> <div class="h-4 w-[20%] bg-ebony-clay" />
                   </div>
                   <div class="h-3 w-full bg-ebony-clay" />
                   <div class="h-3 w-full bg-ebony-clay" />
@@ -159,18 +166,18 @@
                 
                 <div class="flex flex-col gap-x-2 gap-y-3 w-full">
                   <div class="flex gap-2 items-center font-semibold text-[18px]">
-                    <img src="../public/icon-star.svg" /> {{ toRoundedRating(trending.vote_average) ?? '-' }}
+                    <img :src="IconStar" /> {{ toRoundedRating(trending.vote_average) ?? '-' }}
                   </div>
                   <div 
-                    class="text-[25px] font-medium hover:text-carmine-pink cursor-pointer"
+                    class="text-[23px] font-medium hover:text-carmine-pink cursor-pointer"
                     @click="navigateTo(`/detail/${trending.id}`)"
                   >
                     {{ (trending.media_type == 'tv' ? trending.name : trending.title) ?? '-' }}
                   </div>
-                  <div class="text-[16px] flex gap-[8px] items-center">
+                  <div class="text-[14px] flex gap-[8px] items-center">
                     {{ toFullYear(trending.media_type == 'tv' ? trending.first_air_date : trending.release_date) ?? '-' }} 
-                    <img src="../public/icon-ellipse.svg" /> 
-                    Sci-Fi
+                    <img :src="IconEllipse" /> 
+                    {{ genreOptions.find(genre => trending.genre_ids.includes(Number(genre.value)))?.label ?? '-' }}
                   </div>
                   <div class="text-[12px] line-clamp-6">
                     {{ trending.overview ?? '-' }}
