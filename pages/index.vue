@@ -17,7 +17,7 @@
   import type { TrendingDT } from "@/types/models/Trending.model";
 
   const emblaAutoPlay = Autoplay({
-    delay: 5000,
+    delay: 3000,
     stopOnMouseEnter: true,
     stopOnInteraction: false,
   });

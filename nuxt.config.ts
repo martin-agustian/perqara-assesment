@@ -2,6 +2,11 @@
 export default defineNuxtConfig({
   ssr: true,
   compatibilityDate: '2024-11-01',
+  runtimeConfig: {
+    public: {
+      apiBase: "https://api.themoviedb.org/3/",
+    }
+  },
   devtools: {
     enabled: true 
   },

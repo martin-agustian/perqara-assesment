@@ -7,6 +7,9 @@
   // ** Helper
   import { toFullYear } from '@/helpers/utils.helper';
 
+  // ** Options
+  import { genreOptions } from '@/commons/options';
+
   // ** Types
   import type { OptionsDT } from '@/commons/types';
   import type { SearchMovieRequestDT } from '@/types/requests/Search.request';
@@ -80,9 +83,21 @@
       </div>      
 
       <ul class="flex gap-[25px] text-[13px] font-semibold">
-        <li class="flex gap-[5px] items-center cursor-pointer">
-          <img src="../../public/icon-grid.svg" class="size-[20px]"> categories
-        </li>
+        <Popover>
+          <PopoverTrigger as-child>
+            <li class="flex gap-[5px] items-center cursor-pointer">
+              <img src="../../public/icon-grid.svg" class="size-[20px]"> categories
+            </li>
+          </PopoverTrigger>
+          <PopoverContent class="w-min">
+            <div 
+              v-for="(genre, i) in genreOptions" :key="i" 
+              class="text-[14px] font-medium hover:font-semibold hover:text-carmine-pink cursor-pointer p-2"
+            >
+              {{ genre.label }}
+            </div>
+          </PopoverContent>
+        </Popover>
         <li class="cursor-pointer" @click="navigateTo('/list-movie')">movies</li>
         <li class="cursor-pointer" @click="navigateTo('/list-tv-show')">tv shows</li>
         <li class="cursor-pointer">login</li>
