@@ -55,6 +55,7 @@ module.exports = {
         "dark": "#1E232B",
         "davy-grey": "#505357",
         "ebony-clay": "#292E36",
+        "ghost": "#CBCCCE",
         "green-white": "#EAEAEA",
         "ironside-grey": "#666666",
         "olso-grey": "#929292",
