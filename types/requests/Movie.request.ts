@@ -1,2 +1,1 @@
-export type PopularMovieRequestDT = {};
-export type UpcomingMovieRequestDT = {};
+export type MovieDetailRequestDT = {};

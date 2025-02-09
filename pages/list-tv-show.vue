@@ -15,10 +15,10 @@
   const genreFilter = ref<string[]>([]);
   const pageFilter = ref<number>(1);
 
-  const isLoadMore = ref(true);
+  const isLoadMore = ref<boolean>(true);
 
   const loading = ref<boolean>(true);
-  const loadMoreLoading = ref(false);
+  const loadMoreLoading = ref<boolean>(false);
 
   const tvShows = ref<TvShowDT[]>([]);
 
@@ -88,6 +88,7 @@
       title="tv shows"
       :is-load-more="isLoadMore"
       :loading="loading"
+      :load-more-loading="loadMoreLoading"
       :genre-options="genreOptions"
       :sort-options="sortTvShowOptions"
       @update:genre="handleGenre"
@@ -96,6 +97,7 @@
     >
       <Movie 
         v-for="(tvShow, i) in tvShows" :key="i" 
+        :id="tvShow.id"
         :title="tvShow.name"
         :poster-path="tvShow.poster_path" 
         :release-date="tvShow.first_air_date"

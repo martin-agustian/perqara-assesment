@@ -55,12 +55,15 @@ module.exports = {
         "dark": "#1E232B",
         "davy-grey": "#505357",
         "ebony-clay": "#292E36",
+        "green-white": "#EAEAEA",
+        "ironside-grey": "#666666",
         "olso-grey": "#929292",
         "outer-space": "#2F363F",
         "mercury": "#E5E5E5",
         "mirage": "#15191F",
         "mountain-mist": "#8E9195",
-        "river-bed": "#474C53"
+        "river-bed": "#474C53",
+        "snow-drift": "#F9F9F9"
       },
       borderRadius: {
         xl: "calc(var(--radius) + 4px)",

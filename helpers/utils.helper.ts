@@ -8,8 +8,8 @@ export const cn = (...inputs: ClassValue[]) => {
   return twMerge(clsx(inputs))
 }
 
-export const fullPathImage = (value: string) => {
-  return value ? `https://image.tmdb.org/t/p/w500${value}` : `../../public/the-movie-db-logo.svg`;
+export const fullPathImage = (value: string, size: string = 'w500') => {
+  return value ? `https://image.tmdb.org/t/p/${size}${value}` : `../../public/the-movie-db-logo.svg`;
 }
 
 export const fullYear = (value: string) => {

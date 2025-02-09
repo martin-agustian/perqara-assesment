@@ -15,7 +15,7 @@
   const sortFilter = ref<string>('');
   const pageFilter = ref<number>(1);
 
-  const isLoadMore = ref(true);
+  const isLoadMore = ref<boolean>(true);
 
   const loading = ref<boolean>(true);
   const loadMoreLoading = ref<boolean>(true);
@@ -89,6 +89,7 @@
       title="movies"
       :is-load-more="isLoadMore"
       :loading="loading"
+      :load-more-loading="loadMoreLoading"
       :genre-options="genreOptions"
       :sort-options="sortMovieOptions"
       @update:genre="handleGenre"
@@ -97,6 +98,7 @@
     >
       <Movie 
         v-for="(movie, i) in movies" :key="i"
+        :id="movie.id"
         :title="movie.title"
         :poster-path="movie.poster_path" 
         :release-date="movie.release_date"

@@ -211,6 +211,7 @@
 				<div v-else class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3">
 					<Movie 
             v-for="(movie, i) in movies" :key="i"
+            :id="movie.id"
             :title="movie.title"
             :poster-path="movie.poster_path" 
             :release-date="movie.release_date"
