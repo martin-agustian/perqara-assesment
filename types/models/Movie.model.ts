@@ -8,6 +8,9 @@ export type MovieDT = {
     id: number
     name: string
   }[]
+  spoken_languages: {
+    name: string
+  }[]
   poster_path: string
   overview: string
   release_date: string

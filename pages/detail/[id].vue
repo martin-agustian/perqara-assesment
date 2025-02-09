@@ -76,7 +76,7 @@
                   <div class="flex gap-3 items-center">
                     <img src="/public/icon-star.svg" class="size-[36px]" /> 
                     <div class="text-[28px] font-semibold">
-                      {{ roundedRating(movie.vote_average) }}
+                      {{ roundedRating(movie.vote_average) ?? 0 }}
                     </div>            
                   </div>
   
@@ -85,7 +85,7 @@
                       user score
                     </div>
                     <div class="uppercase">
-                      {{ movie.vote_count }} votes
+                      {{ movie.vote_count ?? '-' }} votes
                     </div>
                   </div>
                 </div>
@@ -97,7 +97,7 @@
                     status
                   </div>
                   <div class="uppercase">
-                    {{ movie.status }}
+                    {{ movie.status ?? '-' }}
                   </div>
                 </div>
   
@@ -108,7 +108,7 @@
                     language
                   </div>
                   <div class="uppercase">
-                    {{ movie.vote_count }}
+                    {{ movie.spoken_languages?.[0]?.name ?? '-' }}
                   </div>
                 </div>
   
@@ -119,7 +119,7 @@
                     budget
                   </div>
                   <div class="uppercase">
-                    {{ movie.budget }}
+                    {{ movie.budget ?? '-' }}
                   </div>
                 </div>
   
@@ -130,10 +130,9 @@
                     production
                   </div>
                   <div class="uppercase">
-                    {{ movie.production_companies[0].name }}
+                    {{ movie.production_companies?.[0]?.name ?? '-' }}
                   </div>
                 </div>
-  
               </div>
             </Container>
           </div>
