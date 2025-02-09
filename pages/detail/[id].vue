@@ -15,22 +15,49 @@
   import type { ReviewDT } from "@/types/models/Review.model";
 
   const route = useRoute();
+  const movieId = Number(route.params.id);
 
   const loading = ref<boolean>(true);
 
-  const movieId = Number(route.params.id);
+  const contentRef = ref();
+  const contentIsReadMore = ref<boolean[]>([true, true]);
+  const contentIsReadMoreButton = ref<boolean[]>([]);
 
   const movie = ref<MovieDT>();
   const recommendations = ref<MovieDT[]>();
   const reviews = ref<ReviewDT[]>();
+
+  const checkIsLineClamping = (computedStyle: CSSStyleDeclaration, element: any) => {
+    const lineClampApplied = computedStyle.getPropertyValue('-webkit-line-clamp');
+    const isOverflowing = element.scrollHeight > element.clientHeight;
+    return lineClampApplied !== 'none' && isOverflowing;
+  }
+
+  const checkClamping = () => {
+    reviews.value?.forEach((_, index) => {
+      const element = contentRef.value[index]; // Access each individual element by index
+
+      if (element) {
+        const computedStyle = window.getComputedStyle(element);
+        const isClamped = checkIsLineClamping(computedStyle, element);
+
+        contentIsReadMoreButton.value?.push(isClamped);
+
+        console.log(
+          isClamped ? 
+            `Item ${index + 1} is line-clamped` : 
+            `Item ${index + 1} is not line-clamped`
+        );
+      }
+    });
+  }
 
   const getDetail = async () => {
     try {
       const movieAPI = await MovieAPI.Detail(movieId);
 
       if (movieAPI.status === 200) {
-        let { data } = movieAPI;
-        movie.value = data;
+        movie.value = movieAPI.data;
       }
     }
     catch (error) {
@@ -50,8 +77,11 @@
       const movieAPI = await MovieAPI.Review(movieId);
 
       if (movieAPI.status === 200) {
-        let { data } = movieAPI;
-        reviews.value = data.results.slice(0, 2);
+        reviews.value = movieAPI.data.results.slice(0, 2);
+        
+        nextTick(() => {
+          checkClamping();
+        });
       }
     }
     catch (error) {
@@ -68,8 +98,7 @@
       const movieAPI = await MovieAPI.Recommendation(movieId);
 
       if (movieAPI.status === 200) {
-        let { data } = movieAPI;
-        recommendations.value = data.results.slice(0, 5);
+        recommendations.value = movieAPI.data.results.slice(0, 5);
       }
     }
     catch (error) {
@@ -224,7 +253,21 @@
               </div>
             </div>
 
-            <div class="text-[13px] italic mt-5" v-html="review.content" />
+            <div class="text-[13px]">
+              <div 
+                ref="contentRef" 
+                :class="`italic ${contentIsReadMore[i] ? 'line-clamp-6' : ''} mt-5`" 
+                v-html="review.content" 
+              />
+
+              <div 
+                v-if="contentIsReadMore[i]" 
+                class="underline text-carmine-pink cursor-pointer"
+                @click="contentIsReadMore[i] = !contentIsReadMore[i]"
+              >
+                read the rest
+              </div>
+            </div>
           </div>
         </div>
         <div v-else class="text-[14px]">
