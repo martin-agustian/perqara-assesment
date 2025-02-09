@@ -45,6 +45,7 @@
   const emits = defineEmits<{
     (e: "update:modelValue", value: string): void;
     (e: "update:options", value: string): void;
+    (e: "click:options", value: string): void;
   }>();
 
   const modelValue = useVModel(props, "modelValue", emits, {
@@ -89,7 +90,7 @@
   }
 
   const handleClickOption = (option: OptionsDT) => {
-    modelValue.value = option.value;
+    emits('click:options', option.value);
     popoverOpen.value = false;
   }
 </script>
@@ -126,21 +127,20 @@
           </span>
         </template>
         <template v-else>
-          <template v-for="(option, i) in options" :key="i">
-            <div 
-              :class="cn('relative flex w-full select-none items-center rounded-sm text-sm ' + 
-                'outline-none py-1.5 pl-2 pr-8 hover:bg-accent hover:text-accent-foreground ' + 
-                'data-[disabled]:pointer-events-none data-[disabled]:opacity-50')"
-              @click="handleClickOption(option)" 
-            >
-              <div>{{ option.label }}</div>
+          <div 
+            v-for="(option, i) in options" :key="i"
+            :class="cn('relative flex w-full select-none items-center rounded-sm text-sm ' + 
+              'outline-none py-1.5 pl-2 pr-8 hover:bg-accent hover:text-accent-foreground ' + 
+              'data-[disabled]:pointer-events-none data-[disabled]:opacity-50')"
+            @click="handleClickOption(option)" 
+          >
+            <div>{{ option.label }}</div>
 
-              <div :class="cn(modelValue === option.value ? 'visible' : 'invisible', 
-                'absolute right-2 flex h-3.5 w-3.5 items-center justify-center')">
-                <Check class="h-4 w-4" />
-              </div>
+            <div :class="cn(modelValue === option.value ? 'visible' : 'invisible', 
+              'absolute right-2 flex h-3.5 w-3.5 items-center justify-center')">
+              <Check class="h-4 w-4" />
             </div>
-          </template>
+          </div>
         </template>
       </div>
     </PopoverContent>

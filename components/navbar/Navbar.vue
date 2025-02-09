@@ -29,7 +29,7 @@
       if (searchAPI.status === 200) {
         const { results } = searchAPI.data;
 
-        movies.value = results;        
+        movies.value = results;
         movieOptions.value = movies.value.map(movie => ({
           label: `${movie.title} ${movie.release_date ? '('+toFullYear(movie.release_date)+')' : ''}`,
           value: movie.id.toString()
@@ -53,6 +53,11 @@
     movieQuery.value = value;
     getMovies();
   }
+
+  const handleAutocompleteOption = (value: string) => {
+    movieQuery.value = '';
+    navigateTo(`/detail/${value}`);
+  }
 </script>
 
 <template>
@@ -63,10 +68,13 @@
       <div class="relative flex-1">
         <img src="../../public/icon-movie.svg" class="size-[24px] absolute left-[10px] top-[50%] translate-y-[-50%] z-10">
         <FormAutocomplete
+          id="input-movie"
           placeholder="Find Movie"
           :options="movieOptions"
           :optionLoading="loadingQuery"
+          :modelValue="movieQuery"
           @update:modelValue="handleAutocomplete"
+          @click:options="handleAutocompleteOption"
         />
         <img src="../../public/icon-search.svg" class="size-[16px] absolute right-[10px] top-[50%] translate-y-[-50%] z-10">
       </div>      
