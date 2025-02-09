@@ -52,18 +52,18 @@
         <div :class="cn('absolute inset-x-0 truncate text-left px-5 pr-7', triggerSize == 'sm' && 'px-3 pr-7')">
           <SelectValue :placeholder="props.placeholder" />      
         </div>
-      </SelectTrigger>
       
-      <div :class="cn('absolute top-1/2 -translate-y-1/2 right-0 px-5', triggerSize == 'sm' && 'px-3')">
-        <X v-if="isClearable && modelValue != ''" 
-          :class="cn('cursor-pointer', selectTriggerIconVariants({ variant: triggerVariant, size: triggerSize }))" 
-          @click="emits('click:clear')" 
-        />
+        <div :class="cn('absolute top-1/2 -translate-y-1/2 right-0 px-4', triggerSize == 'sm' && 'px-3')">
+          <X v-if="isClearable && modelValue != ''" 
+            :class="cn('cursor-pointer', selectTriggerIconVariants({ variant: triggerVariant, size: triggerSize }))" 
+            @click="emits('click:clear')" 
+          />
 
-        <ChevronDown v-else 
-          :class="cn(selectTriggerIconVariants({ variant: triggerVariant, size: triggerSize }))" 
-        />
-      </div>
+          <ChevronDown v-else 
+            :class="cn(selectTriggerIconVariants({ variant: triggerVariant, size: triggerSize }))" 
+          />
+        </div>
+      </SelectTrigger>
     </div>
 
     <SelectContent>
