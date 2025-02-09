@@ -126,7 +126,8 @@
     <template v-if="movie">
       <div class="relative">
         <Container class="absolute top-[320px] left-[50%] translate-x-[-50%] z-10">
-          <img :src="toFullPathImage(movie.poster_path)" class="h-[350px]">
+          <img v-if="movie.poster_path" :src="toFullPathImage(movie.poster_path)" class="h-[350px]">
+          <img v-else src="/public/the-movie-db-logo.svg" class="h-[350px] w-[250px] bg-black p-5">
         </Container>
   
         <div class="h-[500px] relative bg-transparent">
