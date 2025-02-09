@@ -151,13 +151,20 @@
           <template v-else>
             <CarouselItem v-for="(trending, i) in trendings" :key="i" class="max-w-[540px] pl-8">
               <div class="flex gap-[40px] bg-black p-4">
-                <img :src="toFullPathImage(trending.poster_path)" class="h-[300px] w-[200px] scale-125 object-fill" />
+                <img 
+                  :src="toFullPathImage(trending.poster_path)" 
+                  class="h-[300px] w-[200px] scale-125 object-fill cursor-pointer"
+                  @click="navigateTo(`/detail/${trending.id}`)" 
+                />
                 
                 <div class="flex flex-col gap-3 w-full">
                   <div class="flex gap-2 items-center font-semibold text-[18px]">
                     <img src="../public/icon-star.svg" /> {{ toRoundedRating(trending.vote_average) }}
                   </div>
-                  <div class="text-[25px] font-medium">
+                  <div 
+                    class="text-[25px] font-medium hover:text-carmine-pink cursor-pointer"
+                    @click="navigateTo(`/detail/${trending.id}`)"
+                  >
                     {{ trending.name }}
                   </div>
                   <div class="text-[16px] flex gap-[8px] items-center">
