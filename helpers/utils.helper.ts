@@ -8,14 +8,29 @@ export const cn = (...inputs: ClassValue[]) => {
   return twMerge(clsx(inputs))
 }
 
-export const fullPathImage = (value: string, size: string = 'w500') => {
+export const toFullPathImage = (value: string, size: string = 'w500') => {
   return value ? `https://image.tmdb.org/t/p/${size}${value}` : `../../public/the-movie-db-logo.svg`;
 }
 
-export const fullYear = (value: string) => {
+export const toFullDate = (value: string) => {
+  return new Date(value).toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
+}
+
+export const toFullYear = (value: string) => {
   return new Date(value).getFullYear();
 }
 
-export const roundedRating = (value: number) => {
+export const toRoundedRating = (value: number) => {
   return parseFloat(value.toFixed(1));
+}
+
+export const toMoney = (value: number) => {
+  return new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+  }).format(value);
 }

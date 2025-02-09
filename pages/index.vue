@@ -8,7 +8,7 @@
   import TrendingAPI from "@/apis/Trending.api";
 
   // ** Helpers
-  import { fullPathImage, fullYear, roundedRating } from "@/helpers/utils.helper";
+  import { toFullPathImage, toFullYear, toRoundedRating } from "@/helpers/utils.helper";
 
   // ** Types
   import type { CarouselApi } from "@/components/carousel";
@@ -151,17 +151,17 @@
           <template v-else>
             <CarouselItem v-for="(trending, i) in trendings" :key="i" class="max-w-[540px] pl-8">
               <div class="flex gap-[40px] bg-black p-4">
-                <img :src="fullPathImage(trending.poster_path)" class="h-[300px] w-[200px] scale-125 object-fill" />
+                <img :src="toFullPathImage(trending.poster_path)" class="h-[300px] w-[200px] scale-125 object-fill" />
                 
                 <div class="flex flex-col gap-3 w-full">
                   <div class="flex gap-2 items-center font-semibold text-[18px]">
-                    <img src="../public/icon-star.svg" /> {{ roundedRating(trending.vote_average) }}
+                    <img src="../public/icon-star.svg" /> {{ toRoundedRating(trending.vote_average) }}
                   </div>
                   <div class="text-[25px] font-medium">
                     {{ trending.name }}
                   </div>
                   <div class="text-[16px] flex gap-[8px] items-center">
-                    {{ fullYear(trending.first_air_date) }} <img src="../public/icon-ellipse.svg" /> Sci-Fi
+                    {{ toFullYear(trending.first_air_date) }} <img src="../public/icon-ellipse.svg" /> Sci-Fi
                   </div>
                   <div class="text-[12px]">
                     {{ trending.overview }}

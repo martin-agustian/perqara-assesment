@@ -5,10 +5,11 @@
   import MovieAPI from "@/apis/Movie.api";
 
   // ** Helpers
-  import { fullPathImage, fullYear, roundedRating } from "@/helpers/utils.helper";
+  import { toFullDate, toFullPathImage, toFullYear, toMoney, toRoundedRating } from "@/helpers/utils.helper";
 
   // ** Types
   import type { MovieDT } from "@/types/models/Movie.model";
+  import type { ReviewDT } from "@/types/models/Review.model";
 
   const route = useRoute();
 
@@ -17,6 +18,7 @@
   const movieId = Number(route.params.id);
 
   const movie = ref<MovieDT>();
+  const reviews = ref<ReviewDT[]>();
 
   const getDetail = async () => {
     try {
@@ -39,9 +41,28 @@
     }
   }
 
+  const getReview = async () => {
+    try {
+      const movieAPI = await MovieAPI.Review(movieId);
+
+      if (movieAPI.status === 200) {
+        let { data } = movieAPI;
+        reviews.value = data.results.slice(0, 2);
+      }
+    }
+    catch (error) {
+      await Swal.fire({
+        title: "Error!",
+        text: error as string,
+        icon: "error"
+      });
+    }
+  }
+
   onMounted(() => {
     loading.value = true;
     getDetail();
+    getReview();
   })
 </script>
 
@@ -50,15 +71,15 @@
       <div class="">
         <div class="relative">
           <Container class="absolute top-[320px] left-[50%] translate-x-[-50%] z-10">
-            <img :src="fullPathImage(movie.poster_path)" class="h-[350px]">
+            <img :src="toFullPathImage(movie.poster_path)" class="h-[350px]">
           </Container>
 
           <div class="h-[500px] relative bg-transparent">
-            <img :src="fullPathImage(movie.backdrop_path, 'original')" class="absolute bg-no-repeat bg-center bg-cover inset-0 brightness-50 z-[-1]">
+            <img :src="toFullPathImage(movie.backdrop_path, 'original')" class="absolute bg-no-repeat bg-center bg-cover inset-0 brightness-50 z-[-1]">
             <Container class="flex items-end h-full pl-72">
               <div>
                 <div class="text-[18px]">
-                  {{ fullYear(movie.release_date) }}
+                  {{ toFullYear(movie.release_date) }}
                 </div>
       
                 <div class="text-[30px] font-medium">
@@ -76,7 +97,7 @@
                   <div class="flex gap-3 items-center">
                     <img src="/public/icon-star.svg" class="size-[36px]" /> 
                     <div class="text-[28px] font-semibold">
-                      {{ roundedRating(movie.vote_average) ?? 0 }}
+                      {{ toRoundedRating(movie.vote_average) ?? 0 }}
                     </div>            
                   </div>
   
@@ -119,7 +140,7 @@
                     budget
                   </div>
                   <div class="uppercase">
-                    {{ movie.budget ?? '-' }}
+                    {{ movie.budget ? toMoney(movie.budget) : '-' }}
                   </div>
                 </div>
   
@@ -154,38 +175,38 @@
             <div class="text-carmine-pink font-semibold mb-3">
               Reviews
             </div>
-            <div class="bg-snow-drift rounded-lg p-4">
 
-              <div class="flex items-center justify-between">
-                <div>
-                  <div class="text-[14px] font-semibold">
-                    SWITCH
+            <div v-if="reviews && reviews.length > 0" class="grid grid-cols-2 gap-x-3">
+              <div v-for="(review, i) in reviews" :key="i" class="bg-snow-drift rounded-lg p-4">
+                <div class="flex items-center justify-between">
+                  <div class="flex gap-3 items-center">
+                    <img :src="toFullPathImage(review.author_details.avatar_path)" class="size-14 rounded-full">
+
+                    <div>
+                      <div class="text-[14px] font-semibold">
+                        {{ review.author_details.username }}
+                      </div>
+                      <div class="text-[12px] text-ironside-grey">
+                        {{ toFullDate(review.created_at) }}
+                      </div>
+                    </div>
                   </div>
-                  <div class="text-[12px] text-ironside-grey">
-                    December 18, 2020
+  
+                  <div class="bg-green-white rounded-md p-3">
+                    <div class="flex gap-2 items-start">
+                      <img src="/public/icon-star.svg" class="size-[20px]" /> 
+                      <div class="text-[28px] font-semibold leading-none">
+                        {{ toRoundedRating(review.author_details.rating) }}
+                      </div>            
+                    </div>
                   </div>
                 </div>
-
-                <div class="bg-green-white rounded-md p-3">
-                  <div class="flex gap-2 items-start">
-                    <img src="/public/icon-star.svg" class="size-[20px]" /> 
-                    <div class="text-[28px] font-semibold leading-none">
-                      {{ roundedRating(movie.vote_average) }}
-                    </div>            
-                  </div>
-                </div>
+  
+                <div class="text-[13px] italic mt-5" v-html="review.content" />
               </div>
-
-              <div class="text-[13px] italic mt-3">
-                It isn't as easy as saying 'Wonder Woman 1984' is a good or bad movie. 
-                The pieces are there, and there are moments I adore, but it does come 
-                across as a bit of a mess, even though the action sequences are breathtaking. 
-                If you're a fan of the original film, you'll be more willing to take the ride, 
-                but for those more indifferent, it may be a bit of a blander sit. If you can 
-                and are planning to watch it, the theatrical experience is the way to go - 
-                there is nothing like seeing these stunning sets, fun action scenes and hearing Zimmer's
-                jaw-dropping score like on the big screen. - Chris dos Santos... read the rest.
-              </div>
+            </div>
+            <div v-else class="text-[14px]">
+              -
             </div>
           </Container>
         </div>
