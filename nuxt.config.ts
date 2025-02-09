@@ -21,6 +21,10 @@ export default defineNuxtConfig({
   css: [
     "assets/css/tailwind.css",
   ],
+  tailwindcss: {
+    cssPath: ["assets/css/tailwind.css", { injectPosition: "first" }],
+    configPath: "tailwind.config.ts",
+  },
   shadcn: {
     prefix: "",
     componentDir: "./components"

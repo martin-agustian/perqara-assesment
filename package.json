@@ -27,5 +27,13 @@
     "tailwindcss-animate": "^1.0.7",
     "vue": "latest",
     "vue-router": "latest"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^7.14.1",
+    "@typescript-eslint/parser": "^7.14.1",
+    "eslint": "^8.57.0",
+    "eslint-plugin-vue": "^9.26.0",
+    "typescript": "^5.4.5",
+    "vue-eslint-parser": "^9.4.3"
   }
 }

@@ -25,7 +25,7 @@ export const toFullYear = (value: string) => {
 }
 
 export const toRoundedRating = (value: number) => {
-  return parseFloat(value.toFixed(1));
+  return (Math.round(value * 10) / 10).toFixed(1);
 }
 
 export const toMoney = (value: number) => {

@@ -84,26 +84,24 @@
 </script>
 
 <template>
-  <div>
-    <List 
-      title="movies"
-      :is-load-more="isLoadMore"
-      :loading="loading"
-      :load-more-loading="loadMoreLoading"
-      :genre-options="genreOptions"
-      :sort-options="sortMovieOptions"
-      @update:genre="handleGenre"
-      @update:sort="handleSort"
-      @click:more="handleLoadMore"
-    >
-      <Movie 
-        v-for="(movie, i) in movies" :key="i"
-        :id="movie.id"
-        :title="movie.title"
-        :poster-path="movie.poster_path" 
-        :release-date="movie.release_date"
-        :vote-average="movie.vote_average" 
-      />
-    </List>
-  </div>
+  <List 
+    title="movies"
+    :is-load-more="isLoadMore"
+    :loading="loading"
+    :load-more-loading="loadMoreLoading"
+    :genre-options="genreOptions"
+    :sort-options="sortMovieOptions"
+    @update:genre="handleGenre"
+    @update:sort="handleSort"
+    @click:more="handleLoadMore"
+  >
+    <Movie 
+      v-for="(movie, i) in movies" :key="i"
+      :id="movie.id"
+      :title="movie.title"
+      :poster-path="movie.poster_path" 
+      :release-date="movie.release_date"
+      :vote-average="movie.vote_average" 
+    />
+  </List>
 </template>

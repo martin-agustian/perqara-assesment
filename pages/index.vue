@@ -77,7 +77,8 @@
         params.sort_by = 'popularity.desc';
       }
       else {
-        params.sort_by = 'primary_release_date.desc';
+        params.primary_release_year = new Date().getFullYear();
+        params.sort_by = 'primary_release_date.asc';
       }
       
       const discoverAPI = await DiscoverAPI.Movie(params);
@@ -129,112 +130,110 @@
 </script>
 
 <template>
-	<div>
-    <div class="relative py-10">
-      <Carousel @init-api="setCarouselAPI" class="relative py-10" :opts="{ loop: true, align: 'center' }" :plugins="[emblaAutoPlay, emblaClassNames]">
-        <CarouselContent class="-ml-8">
-          <template v-if="loadingCarousel">
-            <CarouselItem v-for="(_, i) in Array.from({ length: 6 })" :key="i" class="max-w-[540px] pl-8">
-              <div class="flex gap-[40px] bg-black animate-pulse p-4">
-                <div class="h-[300px] min-w-[200px] bg-ebony-clay scale-125" />
-                
-                <div class="flex flex-col gap-3 w-full">
-                  <div class="flex gap-2 items-center font-semibold text-[18px]">
-                    <img :src="IconStar" /> <div class="h-4 w-[20%] bg-ebony-clay" />
-                  </div>
-                  <div class="h-5 w-[80%] bg-ebony-clay" />
-                  <div class="flex gap-[8px] items-center">
-                    <div class="h-4 w-[20%] bg-ebony-clay" /> <img :src="IconEllipse" /> <div class="h-4 w-[20%] bg-ebony-clay" />
-                  </div>
-                  <div class="h-3 w-full bg-ebony-clay" />
-                  <div class="h-3 w-full bg-ebony-clay" />
-                  <div class="h-3 w-full bg-ebony-clay" />
-                  <div class="h-3 w-[30%] bg-ebony-clay" />
+  <div class="relative py-10">
+    <Carousel @init-api="setCarouselAPI" class="relative py-10" :opts="{ loop: true, align: 'center' }" :plugins="[emblaAutoPlay, emblaClassNames]">
+      <CarouselContent class="-ml-8">
+        <template v-if="loadingCarousel">
+          <CarouselItem v-for="(_, i) in Array.from({ length: 6 })" :key="i" class="max-w-[540px] pl-8">
+            <div class="flex gap-[40px] bg-black animate-pulse p-4">
+              <div class="h-[300px] min-w-[200px] bg-ebony-clay scale-125" />
+              
+              <div class="flex flex-col gap-3 w-full">
+                <div class="flex gap-2 items-center font-semibold text-[18px]">
+                  <img :src="IconStar" /> <div class="h-4 w-[20%] bg-ebony-clay" />
+                </div>
+                <div class="h-5 w-[80%] bg-ebony-clay" />
+                <div class="flex gap-[8px] items-center">
+                  <div class="h-4 w-[20%] bg-ebony-clay" /> <img :src="IconEllipse" /> <div class="h-4 w-[20%] bg-ebony-clay" />
+                </div>
+                <div class="h-3 w-full bg-ebony-clay" />
+                <div class="h-3 w-full bg-ebony-clay" />
+                <div class="h-3 w-full bg-ebony-clay" />
+                <div class="h-3 w-[30%] bg-ebony-clay" />
+              </div>
+            </div>
+          </CarouselItem>
+        </template>
+
+        <template v-else>
+          <CarouselItem v-for="(trending, i) in trendings" :key="i" class="max-w-[540px] pl-8">
+            <div class="flex gap-[40px] bg-black p-4">
+              <img
+                :src="toFullPathImage(trending.poster_path)" 
+                class="h-[300px] w-[200px] scale-125 object-fill cursor-pointer"
+                @click="navigateTo(`/detail/${trending.id}`)" 
+              />
+              
+              <div class="flex flex-col gap-x-2 gap-y-3 w-full">
+                <div class="flex gap-2 items-center font-semibold text-[18px]">
+                  <img :src="IconStar" /> {{ toRoundedRating(trending.vote_average) ?? '-' }}
+                </div>
+                <div 
+                  class="text-[23px] font-medium hover:text-carmine-pink cursor-pointer"
+                  @click="navigateTo(`/detail/${trending.id}`)"
+                >
+                  {{ (trending.media_type == 'tv' ? trending.name : trending.title) ?? '-' }}
+                </div>
+                <div class="text-[14px] flex gap-[8px] items-center">
+                  {{ toFullYear(trending.media_type == 'tv' ? trending.first_air_date : trending.release_date) ?? '-' }} 
+                  <img :src="IconEllipse" /> 
+                  {{ genreOptions.find(genre => trending.genre_ids.includes(Number(genre.value)))?.label ?? '-' }}
+                </div>
+                <div class="text-[12px] line-clamp-6">
+                  {{ trending.overview ?? '-' }}
                 </div>
               </div>
-            </CarouselItem>
-          </template>
+            </div>
+          </CarouselItem>
+        </template>
+      </CarouselContent>
+    </Carousel>
 
-          <template v-else>
-            <CarouselItem v-for="(trending, i) in trendings" :key="i" class="max-w-[540px] pl-8">
-              <div class="flex gap-[40px] bg-black p-4">
-                <img
-                  :src="toFullPathImage(trending.poster_path)" 
-                  class="h-[300px] w-[200px] scale-125 object-fill cursor-pointer"
-                  @click="navigateTo(`/detail/${trending.id}`)" 
-                />
-                
-                <div class="flex flex-col gap-x-2 gap-y-3 w-full">
-                  <div class="flex gap-2 items-center font-semibold text-[18px]">
-                    <img :src="IconStar" /> {{ toRoundedRating(trending.vote_average) ?? '-' }}
-                  </div>
-                  <div 
-                    class="text-[23px] font-medium hover:text-carmine-pink cursor-pointer"
-                    @click="navigateTo(`/detail/${trending.id}`)"
-                  >
-                    {{ (trending.media_type == 'tv' ? trending.name : trending.title) ?? '-' }}
-                  </div>
-                  <div class="text-[14px] flex gap-[8px] items-center">
-                    {{ toFullYear(trending.media_type == 'tv' ? trending.first_air_date : trending.release_date) ?? '-' }} 
-                    <img :src="IconEllipse" /> 
-                    {{ genreOptions.find(genre => trending.genre_ids.includes(Number(genre.value)))?.label ?? '-' }}
-                  </div>
-                  <div class="text-[12px] line-clamp-6">
-                    {{ trending.overview ?? '-' }}
-                  </div>
-                </div>
-              </div>
-            </CarouselItem>
-          </template>
-        </CarouselContent>
-      </Carousel>
+    <div class="flex space-x-3 justify-center mt-10">
+      <button
+        v-for="(_, i) in trendings" :key="i" 
+        :class="`h-3 ${carouselCurrentIndex == i ? 'w-10 bg-carmine-pink' : 'w-3 bg-mountain-mist'} rounded-full`"
+        @click="handleCarouselScrollToIndex(i)" 
+      />
+    </div>
+  </div>
 
-      <div class="flex space-x-3 justify-center mt-10">
-        <button
-          v-for="(_, i) in trendings" :key="i" 
-          :class="`h-3 ${carouselCurrentIndex == i ? 'w-10 bg-carmine-pink' : 'w-3 bg-mountain-mist'} rounded-full`"
-          @click="handleCarouselScrollToIndex(i)" 
+  <div class="relative mt-[50px]">
+    <div class="h-[250px] w-full bg-ebony-clay absolute top-[-30px] z-[-1]" />
+
+    <Container>
+      <div class="flex justify-between items-center mb-5">
+        <TitleHead>discover movie</TitleHead>
+
+        <div class="flex gap-3">
+          <Capsule 
+            :variant="isCapsuleIsPopular ? 'primary' : 'secondary'"
+            @click="handleCapsuleUpdate(true)"
+          >
+            Popularity
+          </Capsule>
+          <Capsule 
+            :variant="!isCapsuleIsPopular ? 'primary' : 'secondary'" 
+            @click="handleCapsuleUpdate(false)"
+          >
+            Release Date
+          </Capsule>
+        </div>
+      </div>
+
+      <div v-if="loading" class="py-40">
+        <Loading />
+      </div>
+      <div v-else class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3">
+        <Movie 
+          v-for="(movie, i) in movies" :key="i"
+          :id="movie.id"
+          :title="movie.title"
+          :poster-path="movie.poster_path" 
+          :release-date="movie.release_date"
+          :vote-average="movie.vote_average" 
         />
       </div>
-    </div>
-
-		<div class="relative mt-[50px]">
-			<div class="h-[250px] w-full bg-ebony-clay absolute top-[-30px] z-[-1]" />
-
-			<Container>
-				<div class="flex justify-between items-center mb-5">
-					<TitleHead>discover movie</TitleHead>
-
-					<div class="flex gap-3">
-						<Capsule 
-              :variant="isCapsuleIsPopular ? 'primary' : 'secondary'"
-              @click="handleCapsuleUpdate(true)"
-            >
-              Popularity
-            </Capsule>
-						<Capsule 
-              :variant="!isCapsuleIsPopular ? 'primary' : 'secondary'" 
-              @click="handleCapsuleUpdate(false)"
-            >
-              Release Date
-            </Capsule>
-					</div>
-				</div>
-
-        <div v-if="loading" class="py-40">
-          <Loading />
-        </div>
-				<div v-else class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-3">
-					<Movie 
-            v-for="(movie, i) in movies" :key="i"
-            :id="movie.id"
-            :title="movie.title"
-            :poster-path="movie.poster_path" 
-            :release-date="movie.release_date"
-            :vote-average="movie.vote_average" 
-          />
-				</div>
-			</Container>
-		</div>
-	</div>
+    </Container>
+  </div>
 </template>

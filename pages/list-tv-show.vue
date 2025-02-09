@@ -83,26 +83,24 @@
 </script>
 
 <template>
-	<div>
-    <List 
-      title="tv shows"
-      :is-load-more="isLoadMore"
-      :loading="loading"
-      :load-more-loading="loadMoreLoading"
-      :genre-options="genreOptions"
-      :sort-options="sortTvShowOptions"
-      @update:genre="handleGenre"
-      @update:sort="handleSort"
-      @click:more="handleLoadMore"
-    >
-      <Movie 
-        v-for="(tvShow, i) in tvShows" :key="i" 
-        :id="tvShow.id"
-        :title="tvShow.name"
-        :poster-path="tvShow.poster_path" 
-        :release-date="tvShow.first_air_date"
-        :vote-average="tvShow.vote_average"
-      />
-    </List>
-	</div>
+	<List 
+    title="tv shows"
+    :is-load-more="isLoadMore"
+    :loading="loading"
+    :load-more-loading="loadMoreLoading"
+    :genre-options="genreOptions"
+    :sort-options="sortTvShowOptions"
+    @update:genre="handleGenre"
+    @update:sort="handleSort"
+    @click:more="handleLoadMore"
+  >
+    <Movie 
+      v-for="(tvShow, i) in tvShows" :key="i" 
+      :id="tvShow.id"
+      :title="tvShow.name"
+      :poster-path="tvShow.poster_path" 
+      :release-date="tvShow.first_air_date"
+      :vote-average="tvShow.vote_average"
+    />
+  </List>
 </template>
